@@ -10,7 +10,7 @@
 #include <argos3/plugins/simulator/physics_engines/dynamics3d/dynamics3d_shape_manager.h>
 
 #include <argos3/plugins/simulator/entities/wheeled_entity.h>
-#include <newepuck/simulator/newepuck_entity.h>
+#include <argos3/plugins/robots/newepuck/simulator/newepuck_entity.h>
 
 namespace argos {
 

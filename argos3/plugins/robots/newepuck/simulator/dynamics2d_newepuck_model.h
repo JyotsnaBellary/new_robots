@@ -16,7 +16,7 @@ namespace argos {
 
 #include <argos3/plugins/simulator/physics_engines/dynamics2d/dynamics2d_single_body_object_model.h>
 #include <argos3/plugins/simulator/physics_engines/dynamics2d/dynamics2d_differentialsteering_control.h>
-#include <newepuck/simulator/newepuck_entity.h>
+#include <argos3/plugins/robots/newepuck/simulator/newepuck_entity.h>
 
 namespace argos {
 
