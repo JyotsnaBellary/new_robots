@@ -47,8 +47,7 @@ else(LUA_FOUND)
 endif(LUA_FOUND)
 
 # to use the new robot
-add_subdirectory(myepuck)
-add_subdirectory(newepuck)
+add_subdirectory(argos3)
 
 #Fix new Footbot plugin
 # add_subdirectory(newfootbot)

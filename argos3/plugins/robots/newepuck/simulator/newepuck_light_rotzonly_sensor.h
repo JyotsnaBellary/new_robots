@@ -1,21 +1,21 @@
 /**
- * @file <argos3/plugins/simulator/sensors/newepuck_proximity_default_sensor.h>
+ * @file <newepuck/simulator/newepuck_light_rotzonly_sensor.h>
  *
- * @author Danesh Tarapore - <daneshtarapore@gmail.com>
+ * @author Carlo Pinciroli - <ilpincy@gmail.com>
  */
 
-#ifndef NEWEPUCK_PROXIMITY_DEFAULT_SENSOR_H
-#define NEWEPUCK_PROXIMITY_DEFAULT_SENSOR_H
+#ifndef NEWEPUCK_LIGHT_ROTZONLY_SENSOR_H
+#define NEWEPUCK_LIGHT_ROTZONLY_SENSOR_H
 
 #include <string>
 #include <map>
 
 namespace argos {
-   class CNewEPuckProximityDefaultSensor;
-   class CProximitySensorEquippedEntity;
+   class CNewEPuckLightRotZOnlySensor;
+   class CLightSensorEquippedEntity;
 }
 
-#include <newepuck/control_interface/ci_newepuck_proximity_sensor.h>
+#include <argos3/plugins/robots/newepuck/control_interface/ci_newepuck_light_sensor.h>
 #include <argos3/core/utility/math/range.h>
 #include <argos3/core/utility/math/rng.h>
 #include <argos3/core/simulator/space/space.h>
@@ -23,14 +23,14 @@ namespace argos {
 
 namespace argos {
 
-   class CNewEPuckProximityDefaultSensor : public CSimulatedSensor,
-                                   public CCI_NewEPuckProximitySensor {
+   class CNewEPuckLightRotZOnlySensor : public CSimulatedSensor,
+                                      public CCI_NewEPuckLightSensor {
 
    public:
 
-      CNewEPuckProximityDefaultSensor();
+      CNewEPuckLightRotZOnlySensor();
 
-      virtual ~CNewEPuckProximityDefaultSensor() {}
+      virtual ~CNewEPuckLightRotZOnlySensor() {}
 
       virtual void SetRobot(CComposableEntity& c_entity);
 
@@ -40,14 +40,7 @@ namespace argos {
 
       virtual void Reset();
 
-      /**
-       * Calculates the proximity reading when the closest occluding object is located as the given distance.
-       * @param f_distance The distance of the closest occluding object in meters
-       * @returns A value in the range [0:1], where 0 means that the object is too far to be sensed, and 1 means the object is so close that it saturates the sensor.
-       */
-      virtual Real CalculateReading(Real f_distance);
-
-      /**
+            /**
        * Returns true if the rays must be shown in the GUI.
        * @return true if the rays must be shown in the GUI.
        */
@@ -68,8 +61,8 @@ namespace argos {
       /** Reference to embodied entity associated to this sensor */
       CEmbodiedEntity* m_pcEmbodiedEntity;
 
-      /** Reference to proximity sensor equipped entity associated to this sensor */
-      CProximitySensorEquippedEntity* m_pcProximityEntity;
+      /** Reference to light sensor equipped entity associated to this sensor */
+      CLightSensorEquippedEntity* m_pcLightEntity;
 
       /** Reference to controllable entity associated to this sensor */
       CControllableEntity* m_pcControllableEntity;

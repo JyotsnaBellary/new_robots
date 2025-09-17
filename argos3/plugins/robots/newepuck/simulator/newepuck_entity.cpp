@@ -16,6 +16,8 @@
 #include <argos3/plugins/simulator/entities/light_sensor_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/proximity_sensor_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/battery_equipped_entity.h>
+#include <argos3/plugins/simulator/entities/quadrotor_entity.h>
+#include <argos3/plugins/simulator/entities/perspective_camera_equipped_entity.h>
 
 namespace argos {
 
