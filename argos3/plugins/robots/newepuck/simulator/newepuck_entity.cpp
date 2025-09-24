@@ -16,8 +16,8 @@
 #include <argos3/plugins/simulator/entities/light_sensor_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/proximity_sensor_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/battery_equipped_entity.h>
-#include <argos3/plugins/simulator/entities/quadrotor_entity.h>
-#include <argos3/plugins/simulator/entities/perspective_camera_equipped_entity.h>
+// #include <argos3/plugins/simulator/entities/quadrotor_entity.h>
+// #include <argos3/plugins/simulator/entities/perspective_camera_equipped_entity.h>
 
 namespace argos {
 
@@ -41,6 +41,10 @@ namespace argos {
    static const Real LED_RING_ELEVATION         = 0.086f;
    static const Real RAB_ELEVATION              = LED_RING_ELEVATION;
 
+   /* Choose your radius (distance from center) and elevation */
+   const Real LIGHT_RING_RADIUS = 0.08f; // tweak as needed
+   const Real LIGHT_RING_Z      = PROXIMITY_SENSOR_RING_ELEVATION; // or a fixed value, e.g., 0.02f
+
    /****************************************/
    /****************************************/
 
@@ -54,7 +58,12 @@ namespace argos {
       m_pcProximitySensorEquippedEntity(nullptr),
       m_pcRABEquippedEntity(nullptr),
       m_pcWheeledEntity(nullptr),
-      m_pcBatteryEquippedEntity(nullptr) {
+      m_pcBatteryEquippedEntity(nullptr)
+
+      //to match eyebot (test purposes)
+      // m_pcPerspectiveCameraEquippedEntity(nullptr),
+      // m_pcQuadRotorEntity(nullptr)
+      {
    }
 
    /****************************************/
@@ -67,6 +76,10 @@ namespace argos {
                               Real f_rab_range,
                               size_t un_rab_data_size,
                               const std::string& str_bat_model) :
+                              // const CRadians& c_perspcam_aperture,
+                              //   Real f_perspcam_focal_length,
+                              //   Real f_perspcam_range
+                              
       CComposableEntity(nullptr, str_id),
       m_pcControllableEntity(nullptr),
       m_pcEmbodiedEntity(nullptr),
@@ -76,7 +89,10 @@ namespace argos {
       m_pcProximitySensorEquippedEntity(nullptr),
       m_pcRABEquippedEntity(nullptr),
       m_pcWheeledEntity(nullptr),
-      m_pcBatteryEquippedEntity(nullptr) {
+      m_pcBatteryEquippedEntity(nullptr)
+      // m_pcPerspectiveCameraEquippedEntity(nullptr),
+      // m_pcQuadRotorEntity(nullptr)
+       {
       try {
          /*
           * Create and init components
@@ -103,8 +119,25 @@ namespace argos {
             new CProximitySensorEquippedEntity(this,
                                                "proximity_0");
          AddComponent(*m_pcProximitySensorEquippedEntity);
-
+         /* Quadrotor entity */
+         // m_pcQuadRotorEntity = new CQuadRotorEntity(this, "quadrotor_0");
+         // AddComponent(*m_pcQuadRotorEntity);
 	 
+         /* Perspective camera equipped entity */
+         CQuaternion cPerspCamOrient(CRadians::PI_OVER_TWO, CVector3::Y);
+         SAnchor& cPerspCamAnchor = m_pcEmbodiedEntity->AddAnchor("perspective_camera",
+                                                                  CVector3(0.0, 0.0, 0.0),
+                                                                  cPerspCamOrient);
+         // m_pcPerspectiveCameraEquippedEntity =
+         //    new CPerspectiveCameraEquippedEntity(this,
+         //                                         "perspective_camera_0",
+         //                                         c_perspcam_aperture,
+         //                                         f_perspcam_focal_length,
+         //                                         f_perspcam_range,
+         //                                         640, 480,
+         //                                         cPerspCamAnchor);
+         // AddComponent(*m_pcPerspectiveCameraEquippedEntity);
+
          /*m_pcProximitySensorEquippedEntity->AddSensorRing(
             CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
             PROXIMITY_SENSOR_RING_RADIUS,
@@ -138,17 +171,30 @@ namespace argos {
 
 	 
          /* Light sensor equipped entity */
+         // m_pcLightSensorEquippedEntity =
+         //    new CLightSensorEquippedEntity(this,
+         //                                   "light_0");
+         // AddComponent(*m_pcLightSensorEquippedEntity);
+         // m_pcLightSensorEquippedEntity->AddSensorRing(
+         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
+         //    PROXIMITY_SENSOR_RING_RADIUS,
+         //    PROXIMITY_SENSOR_RING_START_ANGLE,
+         //    PROXIMITY_SENSOR_RING_RANGE,
+         //    8,
+         //    m_pcEmbodiedEntity->GetOriginAnchor());
+
          m_pcLightSensorEquippedEntity =
             new CLightSensorEquippedEntity(this,
                                            "light_0");
          AddComponent(*m_pcLightSensorEquippedEntity);
          m_pcLightSensorEquippedEntity->AddSensorRing(
-            CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-            PROXIMITY_SENSOR_RING_RADIUS,
-            PROXIMITY_SENSOR_RING_START_ANGLE,
+            CVector3(0.0f, 0.0f, LIGHT_RING_Z),
+            LIGHT_RING_RADIUS,
+            CRadians::PI_OVER_FOUR, // 45 degrees 
             PROXIMITY_SENSOR_RING_RANGE,
-            8,
+            4,
             m_pcEmbodiedEntity->GetOriginAnchor());
+
          /* Ground sensor equipped entity */
          m_pcGroundSensorEquippedEntity =
             new CGroundSensorEquippedEntity(this,
@@ -204,6 +250,9 @@ namespace argos {
          m_pcEmbodiedEntity = new CEmbodiedEntity(this);
          AddComponent(*m_pcEmbodiedEntity);
          m_pcEmbodiedEntity->Init(GetNode(t_tree, "body"));
+         /* Quadrotor entity */
+         // m_pcQuadRotorEntity = new CQuadRotorEntity(this, "quadrotor_0");
+         // AddComponent(*m_pcQuadRotorEntity);
          /* Wheeled entity and wheel positions (left, right) */
          m_pcWheeledEntity = new CWheeledEntity(this, "wheels_0", 2);
          AddComponent(*m_pcWheeledEntity);
@@ -224,13 +273,13 @@ namespace argos {
             new CProximitySensorEquippedEntity(this,
                                                "proximity_0");
          AddComponent(*m_pcProximitySensorEquippedEntity);
-         /*m_pcProximitySensorEquippedEntity->AddSensorRing(
-            CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-            PROXIMITY_SENSOR_RING_RADIUS,
-            PROXIMITY_SENSOR_RING_START_ANGLE,
-            PROXIMITY_SENSOR_RING_RANGE,
-            8,
-            m_pcEmbodiedEntity->GetOriginAnchor());*/
+         // m_pcProximitySensorEquippedEntity->AddSensorRing(
+         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
+         //    PROXIMITY_SENSOR_RING_RADIUS,
+         //    PROXIMITY_SENSOR_RING_START_ANGLE,
+         //    PROXIMITY_SENSOR_RING_RANGE,
+         //    8,
+         //    m_pcEmbodiedEntity->GetOriginAnchor());
 
 	 CRadians sensor_angle[8];
          sensor_angle[0] = CRadians::PI / 10.5884f;
@@ -259,17 +308,29 @@ namespace argos {
 
 	 
          /* Light sensor equipped entity */
-         m_pcLightSensorEquippedEntity =
+         // m_pcLightSensorEquippedEntity =
+         //    new CLightSensorEquippedEntity(this,
+         //                                   "light_0");
+         // AddComponent(*m_pcLightSensorEquippedEntity);
+         // m_pcLightSensorEquippedEntity->AddSensorRing(
+         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
+         //    PROXIMITY_SENSOR_RING_RADIUS,
+         //    PROXIMITY_SENSOR_RING_START_ANGLE,
+         //    PROXIMITY_SENSOR_RING_RANGE,
+         //    8,
+         //    m_pcEmbodiedEntity->GetOriginAnchor());
+            m_pcLightSensorEquippedEntity =
             new CLightSensorEquippedEntity(this,
                                            "light_0");
          AddComponent(*m_pcLightSensorEquippedEntity);
          m_pcLightSensorEquippedEntity->AddSensorRing(
-            CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-            PROXIMITY_SENSOR_RING_RADIUS,
-            PROXIMITY_SENSOR_RING_START_ANGLE,
+            CVector3(0.0f, 0.0f, LIGHT_RING_Z),
+            LIGHT_RING_RADIUS,
+            CRadians::PI_OVER_FOUR, // 45 degrees 
             PROXIMITY_SENSOR_RING_RANGE,
-            8,
+            4,
             m_pcEmbodiedEntity->GetOriginAnchor());
+
          /* Ground sensor equipped entity */
          m_pcGroundSensorEquippedEntity =
             new CGroundSensorEquippedEntity(this,
@@ -297,6 +358,28 @@ namespace argos {
                                                         *m_pcEmbodiedEntity,
                                                         CVector3(0.0f, 0.0f, RAB_ELEVATION));
          AddComponent(*m_pcRABEquippedEntity);
+         /* Perspective camera equipped entity */
+         // bool bPerspCamFront = true;
+         // GetNodeAttributeOrDefault(t_tree, "camera_front", bPerspCamFront, bPerspCamFront);
+         // Real fPerspCamFocalLength = 0.035;
+         // GetNodeAttributeOrDefault(t_tree, "camera_focal_length", fPerspCamFocalLength, fPerspCamFocalLength);
+         // Real fPerspCamRange = 2.0;
+         // GetNodeAttributeOrDefault(t_tree, "camera_range", fPerspCamRange, fPerspCamRange);
+         // CDegrees cAperture(30.0f);
+         // GetNodeAttributeOrDefault(t_tree, "camera_aperture", cAperture, cAperture);
+         // CQuaternion cPerspCamOrient(CRadians::PI_OVER_TWO, CVector3::Y);
+         // SAnchor& cPerspCamAnchor = m_pcEmbodiedEntity->AddAnchor("perspective_camera",
+                                                                  // CVector3(0.0, 0.0, 0.0),
+                                                                  // cPerspCamOrient);
+         // m_pcPerspectiveCameraEquippedEntity =
+         //    new CPerspectiveCameraEquippedEntity(this,
+         //                                         "perspective_camera_0",
+         //                                         ToRadians(cAperture),
+         //                                         fPerspCamFocalLength,
+         //                                         fPerspCamRange,
+         //                                         640, 480,
+         //                                         cPerspCamAnchor);
+         // AddComponent(*m_pcPerspectiveCameraEquippedEntity);
          /* Battery equipped entity */
          m_pcBatteryEquippedEntity = new CBatteryEquippedEntity(this, "battery_0");
          if(NodeExists(t_tree, "battery"))
@@ -341,6 +424,7 @@ namespace argos {
       UPDATE(m_pcRABEquippedEntity);
       UPDATE(m_pcLEDEquippedEntity);
       UPDATE(m_pcBatteryEquippedEntity);
+      UPDATE(m_pcLightSensorEquippedEntity);
    }
 
    /****************************************/
@@ -440,6 +524,22 @@ namespace argos {
                    "                                   pos_factor=\"1e-3\"\n"
                    "                                   orient_factor=\"1e-3\"/>\n"
                    "    </new_e-puck>\n"
+                   "    ...\n"
+                   "  </arena>\n\n"
+                   "Finally, you can change the parameters of the camera. You can set its aperture,\n"
+                   "focal length, and range with the attributes 'camera_aperture',\n"
+                   "'camera_focal_length', and 'camera_range', respectively. The default values are:\n"
+                   "30 degrees for aperture, 0.035 for focal length, and 2 meters for range. Check\n"
+                   "the following example:\n\n"
+                   "  <arena ...>\n"
+                   "    ...\n"
+                   "    <eye-bot id=\"eb0\"\n"
+                   "             camera_aperture=\"45\"\n"
+                   "             camera_focal_length=\"0.07\"\n"
+                   "             camera_range=\"10\">\n"
+                   "      <body position=\"0.4,2.3,0.25\" orientation=\"45,0,0\" />\n"
+                   "      <controller config=\"mycntrl\" />\n"
+                   "    </eye-bot>\n"
                    "    ...\n"
                    "  </arena>\n\n",
                    "Under development"
