@@ -16,8 +16,6 @@
 #include <argos3/plugins/simulator/entities/light_sensor_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/proximity_sensor_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/battery_equipped_entity.h>
-// #include <argos3/plugins/simulator/entities/quadrotor_entity.h>
-// #include <argos3/plugins/simulator/entities/perspective_camera_equipped_entity.h>
 
 namespace argos {
 
@@ -59,10 +57,6 @@ namespace argos {
       m_pcRABEquippedEntity(nullptr),
       m_pcWheeledEntity(nullptr),
       m_pcBatteryEquippedEntity(nullptr)
-
-      //to match eyebot (test purposes)
-      // m_pcPerspectiveCameraEquippedEntity(nullptr),
-      // m_pcQuadRotorEntity(nullptr)
       {
    }
 
@@ -76,9 +70,6 @@ namespace argos {
                               Real f_rab_range,
                               size_t un_rab_data_size,
                               const std::string& str_bat_model) :
-                              // const CRadians& c_perspcam_aperture,
-                              //   Real f_perspcam_focal_length,
-                              //   Real f_perspcam_range
                               
       CComposableEntity(nullptr, str_id),
       m_pcControllableEntity(nullptr),
@@ -90,8 +81,6 @@ namespace argos {
       m_pcRABEquippedEntity(nullptr),
       m_pcWheeledEntity(nullptr),
       m_pcBatteryEquippedEntity(nullptr)
-      // m_pcPerspectiveCameraEquippedEntity(nullptr),
-      // m_pcQuadRotorEntity(nullptr)
        {
       try {
          /*
@@ -119,32 +108,18 @@ namespace argos {
             new CProximitySensorEquippedEntity(this,
                                                "proximity_0");
          AddComponent(*m_pcProximitySensorEquippedEntity);
-         /* Quadrotor entity */
-         // m_pcQuadRotorEntity = new CQuadRotorEntity(this, "quadrotor_0");
-         // AddComponent(*m_pcQuadRotorEntity);
+         
 	 
-         /* Perspective camera equipped entity */
-         CQuaternion cPerspCamOrient(CRadians::PI_OVER_TWO, CVector3::Y);
-         SAnchor& cPerspCamAnchor = m_pcEmbodiedEntity->AddAnchor("perspective_camera",
-                                                                  CVector3(0.0, 0.0, 0.0),
-                                                                  cPerspCamOrient);
-         // m_pcPerspectiveCameraEquippedEntity =
-         //    new CPerspectiveCameraEquippedEntity(this,
-         //                                         "perspective_camera_0",
-         //                                         c_perspcam_aperture,
-         //                                         f_perspcam_focal_length,
-         //                                         f_perspcam_range,
-         //                                         640, 480,
-         //                                         cPerspCamAnchor);
-         // AddComponent(*m_pcPerspectiveCameraEquippedEntity);
+         // Evenly distributess 24 proximity rays on a circle
+         // m_pcProximitySensorEquippedEntity->AddSensorRing(
+         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
+         //    PROXIMITY_SENSOR_RING_RADIUS,
+         //    PROXIMITY_SENSOR_RING_START_ANGLE,
+         //    PROXIMITY_SENSOR_RING_RANGE,
+         //    8,
+         //    m_pcEmbodiedEntity->GetOriginAnchor());
 
-         /*m_pcProximitySensorEquippedEntity->AddSensorRing(
-            CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-            PROXIMITY_SENSOR_RING_RADIUS,
-            PROXIMITY_SENSOR_RING_START_ANGLE,
-            PROXIMITY_SENSOR_RING_RANGE,
-            8,
-            m_pcEmbodiedEntity->GetOriginAnchor());*/
+         // Manually set the 8 proximity sensors to match the real e-puck robot.
          CRadians sensor_angle[8];
          sensor_angle[0] = CRadians::PI / 10.5884f;
          sensor_angle[1] = CRadians::PI / 3.5999f;
@@ -169,8 +144,23 @@ namespace argos {
             m_pcProximitySensorEquippedEntity->AddSensor(cOff, cDir, PROXIMITY_SENSOR_RING_RANGE, m_pcEmbodiedEntity->GetOriginAnchor());
          }
 
+         /* Perspective camera equipped entity */
+         // CQuaternion cPerspCamOrient(CRadians::PI_OVER_TWO, CVector3::Y);
+         // SAnchor& cPerspCamAnchor = m_pcEmbodiedEntity->AddAnchor("perspective_camera",
+         //                                                          CVector3(0.0, 0.0, 0.0),
+         //                                                          cPerspCamOrient);
+         // m_pcPerspectiveCameraEquippedEntity =
+         //    new CPerspectiveCameraEquippedEntity(this,
+         //                                         "perspective_camera_0",
+         //                                         c_perspcam_aperture,
+         //                                         f_perspcam_focal_length,
+         //                                         f_perspcam_range,
+         //                                         640, 480,
+         //                                         cPerspCamAnchor);
+         // AddComponent(*m_pcPerspectiveCameraEquippedEntity);
 	 
          /* Light sensor equipped entity */
+         // For all around the robot
          // m_pcLightSensorEquippedEntity =
          //    new CLightSensorEquippedEntity(this,
          //                                   "light_0");
@@ -250,9 +240,7 @@ namespace argos {
          m_pcEmbodiedEntity = new CEmbodiedEntity(this);
          AddComponent(*m_pcEmbodiedEntity);
          m_pcEmbodiedEntity->Init(GetNode(t_tree, "body"));
-         /* Quadrotor entity */
-         // m_pcQuadRotorEntity = new CQuadRotorEntity(this, "quadrotor_0");
-         // AddComponent(*m_pcQuadRotorEntity);
+         
          /* Wheeled entity and wheel positions (left, right) */
          m_pcWheeledEntity = new CWheeledEntity(this, "wheels_0", 2);
          AddComponent(*m_pcWheeledEntity);
@@ -358,28 +346,7 @@ namespace argos {
                                                         *m_pcEmbodiedEntity,
                                                         CVector3(0.0f, 0.0f, RAB_ELEVATION));
          AddComponent(*m_pcRABEquippedEntity);
-         /* Perspective camera equipped entity */
-         // bool bPerspCamFront = true;
-         // GetNodeAttributeOrDefault(t_tree, "camera_front", bPerspCamFront, bPerspCamFront);
-         // Real fPerspCamFocalLength = 0.035;
-         // GetNodeAttributeOrDefault(t_tree, "camera_focal_length", fPerspCamFocalLength, fPerspCamFocalLength);
-         // Real fPerspCamRange = 2.0;
-         // GetNodeAttributeOrDefault(t_tree, "camera_range", fPerspCamRange, fPerspCamRange);
-         // CDegrees cAperture(30.0f);
-         // GetNodeAttributeOrDefault(t_tree, "camera_aperture", cAperture, cAperture);
-         // CQuaternion cPerspCamOrient(CRadians::PI_OVER_TWO, CVector3::Y);
-         // SAnchor& cPerspCamAnchor = m_pcEmbodiedEntity->AddAnchor("perspective_camera",
-                                                                  // CVector3(0.0, 0.0, 0.0),
-                                                                  // cPerspCamOrient);
-         // m_pcPerspectiveCameraEquippedEntity =
-         //    new CPerspectiveCameraEquippedEntity(this,
-         //                                         "perspective_camera_0",
-         //                                         ToRadians(cAperture),
-         //                                         fPerspCamFocalLength,
-         //                                         fPerspCamRange,
-         //                                         640, 480,
-         //                                         cPerspCamAnchor);
-         // AddComponent(*m_pcPerspectiveCameraEquippedEntity);
+         
          /* Battery equipped entity */
          m_pcBatteryEquippedEntity = new CBatteryEquippedEntity(this, "battery_0");
          if(NodeExists(t_tree, "battery"))

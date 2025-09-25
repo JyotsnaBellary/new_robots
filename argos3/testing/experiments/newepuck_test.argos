@@ -24,7 +24,7 @@
       </actuators>
       <sensors>
         <newepuck_light                       implementation="rot_z_only" show_rays="true" />
-        <proximity implementation="default" show_rays="true" />
+        <newepuck_proximity implementation="default" show_rays="true" />
       </sensors>
       <params velocity="5" />
     </newepuck_test_controller>
@@ -61,7 +61,7 @@
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="1" max_trials="100">
+      <entity quantity="4" max_trials="100">
         <new_e-puck id="fb">
           <controller config="fdc" />
         </new_e-puck>
@@ -74,7 +74,7 @@
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
-      <entity quantity="5" max_trials="100">
+      <entity quantity="6" max_trials="100">
         <box id="b" size="0.3,0.3,0.5" movable="false" />
       </entity>
     </distribute>
@@ -87,7 +87,7 @@
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="constant" values="0,0,0" />
-      <entity quantity="5" max_trials="100">
+      <entity quantity="6" max_trials="100">
         <cylinder id="c" height="0.5" radius="0.15" movable="false" />
       </entity>
     </distribute>

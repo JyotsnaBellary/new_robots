@@ -40,7 +40,7 @@ void CNewEPuckTest::Init(TConfigurationNode& t_node) {
     */
    argos::LOG << "running test on new epuck" << endl;
    m_pcWheels    = GetActuator<CCI_DifferentialSteeringActuator>("differential_steering");
-   m_pcProximity = GetSensor  <CCI_ProximitySensor             >("proximity"    );
+   m_pcProximity = GetSensor  <CCI_NewEPuckProximitySensor             >("newepuck_proximity"    );
    m_pcLight = GetSensor  <CCI_NewEPuckLightSensor>("newepuck_light");
 
    // m_pcProximity = GetSensor  <CCI_NewEPuckProximitySensor             >("newepuck_proximity"    );
@@ -57,22 +57,56 @@ void CNewEPuckTest::Init(TConfigurationNode& t_node) {
 /****************************************/
 /****************************************/
 
-void CNewEPuckTest::ControlStep() {
+void CNewEPuckTest::LogLightReadings() const {
+   static const char* kLabels[] = {"Front-Right", "Back-Right", "Back-Left", "Front-Left"};
+   const auto& tReadings = m_pcLight->GetReadings();
+
+   std::cout << "Light readings: ";
+   for(size_t i = 0; i < tReadings.size(); ++i) {
+      if(tReadings[i].Value > 0) {
+         // guard against label/readings size mismatch
+         const char* label = (i < 4 ? kLabels[i] : "Unknown");
+         std::cout << label << ": " << tReadings[i].Value << " ";
+      }
+   }
+   std::cout << std::endl;
+}
+
+/****************************************/
+/****************************************/
+
+void CNewEPuckTest::AvoidObstaclesWithProximitySensors() {
+   const auto& readings = m_pcProximity->GetReadings();
+
+   if(readings.empty()) {
+      THROW_ARGOSEXCEPTION("Proximity sensor returned no readings");
+   }
+
+   // Safety check
+   if(readings.size() < 8) {
+      THROW_ARGOSEXCEPTION("Proximity sensor returned " << readings.size()
+                           << " readings; expected at least 8");
+   }
+
    /* Get the highest reading in front of the robot, which corresponds to the closest object */
-   Real fMaxReadVal = m_pcProximity->GetReadings()[0];
+   // Start with index 0
+   Real fMaxReadVal = readings[0].Value;
    UInt32 unMaxReadIdx = 0;
-   if(fMaxReadVal < m_pcProximity->GetReadings()[1]) {
-      fMaxReadVal = m_pcProximity->GetReadings()[1];
+
+   // Check indices 1, 7, and 6 (front left and right sensors)
+   if(fMaxReadVal < readings[1].Value) {
+      fMaxReadVal = readings[1].Value;
       unMaxReadIdx = 1;
    }
-   if(fMaxReadVal < m_pcProximity->GetReadings()[7]) {
-      fMaxReadVal = m_pcProximity->GetReadings()[7];
+   if(fMaxReadVal < readings[7].Value) {
+      fMaxReadVal = readings[7].Value;
       unMaxReadIdx = 7;
    }
-   if(fMaxReadVal < m_pcProximity->GetReadings()[6]) {
-      fMaxReadVal = m_pcProximity->GetReadings()[6];
+   if(fMaxReadVal < readings[6].Value) {
+      fMaxReadVal = readings[6].Value;
       unMaxReadIdx = 6;
    }
+
    /* Do we have an obstacle in front? */
    if(fMaxReadVal > 0.0f) {
      /* Yes, we do: avoid it */
@@ -90,25 +124,17 @@ void CNewEPuckTest::ControlStep() {
       m_pcWheels->SetLinearVelocity(m_fWheelVelocity, m_fWheelVelocity);
    }
 
-   // Debug output
-   // cout << "Proximity readings: ";
-   // for(size_t i = 0; i < m_pcProximity->GetReadings().size(); ++i) {
-   //    if (m_pcProximity->GetReadings()[i] > 0) {
-   //    cout << m_pcProximity->GetReadings()[i] << " ";
-   //    }
-   // }
-   // cout << endl;
-   // cout << "Max Proximity reading: " << fMaxReadVal << " at index " << unMaxReadIdx << endl;
-   const char* labels[] = {"Front-Right", "Back-Right", "Back-Left", "Front-Left"};
+}
+/****************************************/
+/****************************************/
 
-   const CCI_NewEPuckLightSensor::TReadings& tReadings = m_pcLight->GetReadings();
-   cout << "Light readings: ";
-   for(size_t i = 0; i < tReadings.size(); ++i) {
-      if (tReadings[i].Value > 0) {
-         cout << labels[i] << ": " << tReadings[i].Value << " ";
-      }
-      cout << endl;
-   }
+void CNewEPuckTest::ControlStep() {
+   // --- Obstacle Avoidance with proximity sensors --- 
+   AvoidObstaclesWithProximitySensors();
+   
+
+   // --- Light sensor debug ---
+   // LogLightReadings();
 }
 
 /****************************************/

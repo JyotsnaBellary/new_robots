@@ -23,9 +23,9 @@
 /* Definition of the differential steering actuator */
 #include <argos3/plugins/robots/generic/control_interface/ci_differential_steering_actuator.h>
 /* Definition of proximity sensor */
-#include <argos3/plugins/robots/generic/control_interface/ci_proximity_sensor.h>
+// #include <argos3/plugins/robots/generic/control_interface/ci_proximity_sensor.h>
 #include <argos3/plugins/robots/newepuck/control_interface/ci_newepuck_light_sensor.h>
-// #include <argos3/plugins/robots/newepuck/control_interface/ci_newepuck_proximity_sensor.h>
+#include <argos3/plugins/robots/newepuck/control_interface/ci_newepuck_proximity_sensor.h>
 
 /*
  * All the ARGoS stuff in the 'argos' namespace.
@@ -60,6 +60,16 @@ public:
    virtual void ControlStep();
 
    /*
+   * This function logs the light sensor readings to the console.
+   */
+   void LogLightReadings() const;
+
+   /*
+   * This function avoids obstacles using the proximity sensors.
+   */
+   void AvoidObstaclesWithProximitySensors();
+
+   /*
     * This function resets the controller to its state right after the
     * Init().
     * It is called when you press the reset button in the GUI.
@@ -82,8 +92,8 @@ private:
    /* Pointer to the differential steering actuator */
    CCI_DifferentialSteeringActuator* m_pcWheels;
    /* Pointer to the e-puck proximity sensor */
-   // CCI_NewEPuckProximitySensor* m_pcProximity;
-   CCI_ProximitySensor* m_pcProximity;
+   CCI_NewEPuckProximitySensor* m_pcProximity;
+   // CCI_ProximitySensor* m_pcProximity;
 
    /* Pointer to the new e-puck light sensor*/
    CCI_NewEPuckLightSensor* m_pcLight;

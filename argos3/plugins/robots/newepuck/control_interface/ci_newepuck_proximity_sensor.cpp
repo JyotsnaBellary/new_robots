@@ -1,10 +1,11 @@
 /**
  * @file <argos3/plugins/robots/generic/control_interface/ci_newepuck_proximity_sensor.cpp>
  *
- * @author Danesh Tarapore <daneshtarapore@gmail.com>
+ * @author Jyotsna Bellary <jyotsnabellary@gmail.com>
  */
 
 #include "ci_newepuck_proximity_sensor.h"
+#include <argos3/core/utility/math/angles.h>
 
 #ifdef ARGOS_WITH_LUA
 #include <argos3/core/wrappers/lua/lua_utility.h>
@@ -16,8 +17,8 @@ namespace argos
    /****************************************/
    /****************************************/
 
-   //static CRadians SPACING = CRadians(ARGOS_PI / 4.0f);
-   //static CRadians START_ANGLE = SPACING * 0.5f;
+   static CRadians SPACING = CRadians(ARGOS_PI / 4.0f);
+   static CRadians START_ANGLE = SPACING * 0.5f;
 
    /****************************************/
    /****************************************/
@@ -35,14 +36,14 @@ namespace argos
       }*/
 
        // Set the values for the proximity sensor angles
-       m_tReadings[0].Angle = CRadians::PI / 10.5884f;
-       m_tReadings[1].Angle = CRadians::PI / 3.5999f;
+       m_tReadings[0].Angle = CRadians::PI / 10.5884f; // front-left sensor
+       m_tReadings[1].Angle = CRadians::PI / 3.5999f; // front-left sensor
        m_tReadings[2].Angle = CRadians::PI_OVER_TWO; //side sensor
        m_tReadings[3].Angle = CRadians::PI / 1.2f;   // back sensor
        m_tReadings[4].Angle = CRadians::PI / 0.8571f; // back sensor
        m_tReadings[5].Angle = CRadians::PI / 0.6667f; //side sensor
-       m_tReadings[6].Angle = CRadians::PI / 0.5806f;
-       m_tReadings[7].Angle = CRadians::PI / 0.5247f;
+       m_tReadings[6].Angle = CRadians::PI / 0.5806f; // front-right sensor
+       m_tReadings[7].Angle = CRadians::PI / 0.5247f; // front-right sensor
 
        for(size_t i = 0; i < 8; ++i)
        {
@@ -54,6 +55,12 @@ namespace argos
    /****************************************/
    /****************************************/
 
+   const CCI_NewEPuckProximitySensor::TReadings& CCI_NewEPuckProximitySensor::GetReadings() const {
+     return m_tReadings;
+   }
+
+   /****************************************/
+   /****************************************/
 
 #ifdef ARGOS_WITH_LUA
    void CCI_NewEPuckProximitySensor::CreateLuaState(lua_State* pt_lua_state) {
