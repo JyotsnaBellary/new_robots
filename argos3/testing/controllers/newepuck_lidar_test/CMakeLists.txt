@@ -1,0 +1,5 @@
+add_library(newepuck_lidar_test MODULE newepuck_lidar_test.h newepuck_lidar_test.cpp)
+target_link_libraries(newepuck_lidar_test
+  argos3core_simulator
+  argos3plugin_simulator_newepuck
+  argos3plugin_simulator_genericrobot)
