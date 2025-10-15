@@ -38,7 +38,7 @@ void CNewEPuckLidarTest::Init(TConfigurationNode& t_node) {
     * list a device in the XML and then you request it here, an error
     * occurs.
     */
-   argos::LOG << "running test on new epuck" << endl;
+   // argos::LOG << "running Lidar test on new epuck" << endl;
    m_pcWheels    = GetActuator<CCI_DifferentialSteeringActuator>("differential_steering");
    m_pcLidar = GetSensor  <CCI_NewEPuckLidarSensor             >("newepuck_lidar"    );
    m_pcLight = GetSensor  <CCI_NewEPuckLightSensor>("newepuck_light");
@@ -76,53 +76,59 @@ void CNewEPuckLidarTest::LogLightReadings() const {
 /****************************************/
 
 void CNewEPuckLidarTest::AvoidObstaclesWithLidarSensor() {
-   const auto& readings = m_pcLidar->GetReadings();
+   const auto& reading = m_pcLidar->GetReading(3);
 
-   if(readings.empty()) {
-      THROW_ARGOSEXCEPTION("Lidar sensor returned no readings");
-   }
+   // if(!readings.empty()) {
+   //    THROW_ARGOSEXCEPTION("Lidar sensor returned readings");
+   // }
 
-   // Safety check
-   if(readings.size() < 8) {
-      THROW_ARGOSEXCEPTION("Lidar sensor returned " << readings.size()
-                           << " readings; expected at least 8");
-   }
+   // if(readings.empty()) {
+   //    THROW_ARGOSEXCEPTION("Lidar sensor returned no readings");
+   // }
+
+   // // Safety check
+   // if(readings.size() < 8) {
+   //    THROW_ARGOSEXCEPTION("Lidar sensor returned " << readings.size()
+   //                         << " readings; expected at least 8");
+   // }
 
    /* Get the highest reading in front of the robot, which corresponds to the closest object */
    // Start with index 0
-   Real fMaxReadVal = readings[0].Value;
-   UInt32 unMaxReadIdx = 0;
+   // Real fMaxReadVal = readings[0].Value;
+   // UInt32 unMaxReadIdx = 0;
 
-   // Check indices 1, 7, and 6 (front left and right sensors)
-   if(fMaxReadVal < readings[1].Value) {
-      fMaxReadVal = readings[1].Value;
-      unMaxReadIdx = 1;
-   }
-   if(fMaxReadVal < readings[7].Value) {
-      fMaxReadVal = readings[7].Value;
-      unMaxReadIdx = 7;
-   }
-   if(fMaxReadVal < readings[6].Value) {
-      fMaxReadVal = readings[6].Value;
-      unMaxReadIdx = 6;
-   }
+   // // Check indices 1, 7, and 6 (front left and right sensors)
+   // if(fMaxReadVal < readings[1].Value) {
+   //    fMaxReadVal = readings[1].Value;
+   //    unMaxReadIdx = 1;
+   // }
+   // if(fMaxReadVal < readings[7].Value) {
+   //    fMaxReadVal = readings[7].Value;
+   //    unMaxReadIdx = 7;
+   // }
+   // if(fMaxReadVal < readings[6].Value) {
+   //    fMaxReadVal = readings[6].Value;
+   //    unMaxReadIdx = 6;
+   // }
 
+   argos::LOG << "Checking for obstacles in the front" << endl;
+   argos::LOG << "reading:" << reading << endl;
    /* Do we have an obstacle in front? */
-   if(fMaxReadVal > 0.0f) {
-     /* Yes, we do: avoid it */
-     if(unMaxReadIdx == 0 || unMaxReadIdx == 1) {
-       /* The obstacle is on the left, turn right */
-       m_pcWheels->SetLinearVelocity(m_fWheelVelocity, 0.0f);
-     }
-     else {
-       /* The obstacle is on the left, turn right */
-       m_pcWheels->SetLinearVelocity(0.0f, m_fWheelVelocity);
-     }
-   }
-   else {
-     /* No, we don't: go straight */
-      m_pcWheels->SetLinearVelocity(m_fWheelVelocity, m_fWheelVelocity);
-   }
+   // if(fMaxReadVal > 0.0f) {
+   //   /* Yes, we do: avoid it */
+   //   if(unMaxReadIdx == 0 || unMaxReadIdx == 1) {
+   //     /* The obstacle is on the left, turn right */
+   //     m_pcWheels->SetLinearVelocity(m_fWheelVelocity, 0.0f);
+   //   }
+   //   else {
+   //     /* The obstacle is on the left, turn right */
+   //     m_pcWheels->SetLinearVelocity(0.0f, m_fWheelVelocity);
+   //   }
+   // }
+   // else {
+   //   /* No, we don't: go straight */
+   //    m_pcWheels->SetLinearVelocity(m_fWheelVelocity, m_fWheelVelocity);
+   // }
 
 }
 /****************************************/
@@ -130,6 +136,8 @@ void CNewEPuckLidarTest::AvoidObstaclesWithLidarSensor() {
 
 void CNewEPuckLidarTest::ControlStep() {
    // --- Obstacle Avoidance with proximity sensors --- 
+
+   argos::LOG << "running Lidar test on new epuck" << endl;
    AvoidObstaclesWithLidarSensor();
    
 

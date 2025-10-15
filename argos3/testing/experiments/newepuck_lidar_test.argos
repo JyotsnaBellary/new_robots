@@ -24,7 +24,6 @@
       </actuators>
       <sensors>
         <newepuck_light                       implementation="rot_z_only" show_rays="true" />
-        <newepuck_lidar implementation="default" show_rays="true" />
       </sensors>
       <params velocity="5" />
     </newepuck_lidar_test_controller>
