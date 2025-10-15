@@ -10,6 +10,7 @@ using namespace std;
 CNewEPuckTest::CNewEPuckTest() :
    m_pcWheels(NULL),
    m_pcProximity(NULL),
+   m_pcGround(NULL), 
    m_fWheelVelocity(2.5f) {}
 
 /****************************************/
@@ -38,12 +39,14 @@ void CNewEPuckTest::Init(TConfigurationNode& t_node) {
     * list a device in the XML and then you request it here, an error
     * occurs.
     */
-   argos::LOG << "running test on new epuck" << endl;
+
    m_pcWheels    = GetActuator<CCI_DifferentialSteeringActuator>("differential_steering");
    m_pcProximity = GetSensor  <CCI_NewEPuckProximitySensor             >("newepuck_proximity"    );
    m_pcLight = GetSensor  <CCI_NewEPuckLightSensor>("newepuck_light");
+   m_pcGround = GetSensor  <CCI_NewEPuckBaseGroundSensor>("newepuck_ground");
 
-   // m_pcProximity = GetSensor  <CCI_NewEPuckProximitySensor             >("newepuck_proximity"    );
+   const auto& tReadings = m_pcGround->GetReadings();
+   
    /*
     * Parse the configuration file
     *
@@ -71,6 +74,37 @@ void CNewEPuckTest::LogLightReadings() const {
    }
    std::cout << std::endl;
 }
+
+/****************************************/
+/****************************************/
+
+void CNewEPuckTest::LogGroundSensorReadings() const {
+    const auto& tGroundReads = m_pcGround->GetReadings();
+
+    /* Get this robot's ID */
+    const std::string& strId = GetId();
+
+    /* Determine how many sensors are in "white" (close to 1.0) */
+    size_t unWhiteCount = 0;
+    for(size_t i = 0; i < tGroundReads.size(); ++i) {
+        if(tGroundReads[i].Value > 0.8f) {   // 0.8 threshold for "white"
+            ++unWhiteCount;
+        }
+    }
+
+    /* Classify based on number of white sensors */
+    std::string strZone;
+    if(unWhiteCount == tGroundReads.size()) {
+        strZone = "WHITE";
+    } else {
+        strZone = "GRAY";
+    }
+
+    /* Print results */
+    std::cout << strId << " | ";
+    std::cout << "| Zone: " << strZone << std::endl;
+}
+
 
 /****************************************/
 /****************************************/
@@ -129,12 +163,13 @@ void CNewEPuckTest::AvoidObstaclesWithProximitySensors() {
 /****************************************/
 
 void CNewEPuckTest::ControlStep() {
+
    // --- Obstacle Avoidance with proximity sensors --- 
    AvoidObstaclesWithProximitySensors();
    
-
+   LogGroundSensorReadings();
    // --- Light sensor debug ---
-   // LogLightReadings();
+   LogLightReadings();
 }
 
 /****************************************/
