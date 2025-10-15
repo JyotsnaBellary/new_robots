@@ -5,14 +5,16 @@
 #
 set(ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_CONTROLINTERFACE
   control_interface/ci_newepuck_proximity_sensor.h
-  control_interface/ci_newepuck_lidar_sensor.h
+  control_interface/ci_newepuck_base_ground_sensor.h
+  # control_interface/ci_newepuck_lidar_sensor.h
   control_interface/ci_newepuck_light_sensor.h)
 
 set(ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_SIMULATOR
     simulator/dynamics2d_newepuck_model.h
     simulator/dynamics3d_newepuck_model.h
+    simulator/newepuck_base_ground_rotzonly_sensor.h
     simulator/newepuck_light_rotzonly_sensor.h
-    simulator/newepuck_lidar_default_sensor.h
+    # simulator/newepuck_lidar_default_sensor.h
     simulator/newepuck_proximity_default_sensor.h
     simulator/newepuck_entity.h
     )
@@ -23,7 +25,8 @@ set(ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_SIMULATOR
 set(ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK
   ${ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_CONTROLINTERFACE}
   control_interface/ci_newepuck_proximity_sensor.cpp
-  control_interface/ci_newepuck_lidar_sensor.cpp
+  control_interface/ci_newepuck_base_ground_sensor.cpp
+  # control_interface/ci_newepuck_lidar_sensor.cpp
   control_interface/ci_newepuck_light_sensor.cpp)
 
 set(ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK
@@ -31,8 +34,9 @@ set(ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK
   ${ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_SIMULATOR}
   simulator/dynamics2d_newepuck_model.cpp
   simulator/dynamics3d_newepuck_model.cpp
+  simulator/newepuck_base_ground_rotzonly_sensor.cpp
   simulator/newepuck_light_rotzonly_sensor.cpp
-  simulator/newepuck_lidar_default_sensor.cpp
+  # simulator/newepuck_lidar_default_sensor.cpp
   simulator/newepuck_entity.cpp
   simulator/newepuck_proximity_default_sensor.cpp
 )
