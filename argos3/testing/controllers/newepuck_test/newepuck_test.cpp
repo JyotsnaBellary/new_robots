@@ -11,6 +11,7 @@ CNewEPuckTest::CNewEPuckTest() :
    m_pcWheels(NULL),
    m_pcProximity(NULL),
    m_pcGround(NULL), 
+   m_pcLight(NULL),
    m_fWheelVelocity(2.5f) {}
 
 /****************************************/
@@ -44,6 +45,7 @@ void CNewEPuckTest::Init(TConfigurationNode& t_node) {
    m_pcProximity = GetSensor  <CCI_NewEPuckProximitySensor             >("newepuck_proximity"    );
    m_pcLight = GetSensor  <CCI_NewEPuckLightSensor>("newepuck_light");
    m_pcGround = GetSensor  <CCI_NewEPuckBaseGroundSensor>("newepuck_ground");
+   m_pcLidar = GetSensor  <CCI_NewEPuckLIDARSensor    >("newepuck_lidar"  );
 
    const auto& tReadings = m_pcGround->GetReadings();
    
@@ -63,7 +65,7 @@ void CNewEPuckTest::Init(TConfigurationNode& t_node) {
 void CNewEPuckTest::LogLightReadings() const {
    static const char* kLabels[] = {"Front-Right", "Back-Right", "Back-Left", "Front-Left"};
    const auto& tReadings = m_pcLight->GetReadings();
-
+   
    std::cout << "Light readings: ";
    for(size_t i = 0; i < tReadings.size(); ++i) {
       if(tReadings[i].Value > 0) {
@@ -103,6 +105,15 @@ void CNewEPuckTest::LogGroundSensorReadings() const {
     /* Print results */
     std::cout << strId << " | ";
     std::cout << "| Zone: " << strZone << std::endl;
+}
+
+/****************************************/
+/****************************************/
+
+void CNewEPuckTest::LogLidarSensorReadings() const {
+    const auto numReadings = m_pcLidar->GetNumReadings();
+   argos::LOG << numReadings << " LIDAR readings: " << numReadings << std::endl;
+
 }
 
 
@@ -170,6 +181,8 @@ void CNewEPuckTest::ControlStep() {
    LogGroundSensorReadings();
    // --- Light sensor debug ---
    LogLightReadings();
+
+   LogLidarSensorReadings();
 }
 
 /****************************************/

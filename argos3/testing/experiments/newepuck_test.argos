@@ -26,6 +26,7 @@
         <newepuck_light                       implementation="rot_z_only" show_rays="true" />
         <newepuck_ground                       implementation="rot_z_only" />
         <newepuck_proximity implementation="default" show_rays="true" />
+        <newepuck_lidar implementation="default" num_readings="360" show_rays="true" />
       </sensors>
       <params velocity="5" />
     </newepuck_test_controller>

@@ -105,10 +105,11 @@ namespace argos {
             m_pcEmbodiedEntity->GetOriginAnchor());
 
          /* LIDAR sensor equipped entity */
-         // m_pcLIDARSensorEquippedEntity =
-         //    new CProximitySensorEquippedEntity(this,
-         //                                       "lidar");
-         // AddComponent(*m_pcLIDARSensorEquippedEntity);
+         m_pcLIDARSensorEquippedEntity =
+            new CProximitySensorEquippedEntity(this,
+                                               "lidar");
+         AddComponent(*m_pcLIDARSensorEquippedEntity);
+
          /* Proximity sensor equipped entity */
          m_pcProximitySensorEquippedEntity =
             new CProximitySensorEquippedEntity(this,
@@ -125,6 +126,7 @@ namespace argos {
          //    8,
          //    m_pcEmbodiedEntity->GetOriginAnchor());
 
+         /* Either of these */
          // Manually set the 8 proximity sensors to match the real e-puck robot.
          CRadians sensor_angle[8];
          sensor_angle[0] = CRadians::PI / 10.5884f;
@@ -290,16 +292,17 @@ namespace argos {
             m_pcEmbodiedEntity->GetOriginAnchor());
          
          /* LIDAR sensor equipped entity */
-         // m_pcLIDARSensorEquippedEntity =
-         //    new CProximitySensorEquippedEntity(this,
-         //                                       "lidar");
-         // AddComponent(*m_pcLIDARSensorEquippedEntity);
+         m_pcLIDARSensorEquippedEntity =
+            new CProximitySensorEquippedEntity(this,
+                                               "lidar");
+         AddComponent(*m_pcLIDARSensorEquippedEntity);
          
          /* Proximity sensor equipped entity */
          m_pcProximitySensorEquippedEntity =
             new CProximitySensorEquippedEntity(this,
-                                               "proximity_0");
+                                               "proximity");
          AddComponent(*m_pcProximitySensorEquippedEntity);
+
          // m_pcProximitySensorEquippedEntity->AddSensorRing(
          //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
          //    PROXIMITY_SENSOR_RING_RADIUS,
@@ -308,7 +311,7 @@ namespace argos {
          //    8,
          //    m_pcEmbodiedEntity->GetOriginAnchor());
 
-	 CRadians sensor_angle[8];
+	      CRadians sensor_angle[8];
          sensor_angle[0] = CRadians::PI / 10.5884f;
          sensor_angle[1] = CRadians::PI / 3.5999f;
          sensor_angle[2] = CRadians::PI_OVER_TWO; //side sensor

@@ -27,6 +27,7 @@
 #include <argos3/plugins/robots/newepuck/control_interface/ci_newepuck_light_sensor.h>
 #include <argos3/plugins/robots/newepuck/control_interface/ci_newepuck_proximity_sensor.h>
 #include <argos3/plugins/robots/newepuck/control_interface/ci_newepuck_base_ground_sensor.h>
+#include <argos3/plugins/robots/newepuck/control_interface/ci_newepuck_lidar_sensor.h>
 
 /*
  * All the ARGoS stuff in the 'argos' namespace.
@@ -71,6 +72,11 @@ public:
    void LogGroundSensorReadings() const;
 
    /*
+   * This function logs the lidar sensor readings to the console.
+   */
+   void LogLidarSensorReadings() const;
+
+   /*
    * This function avoids obstacles using the proximity sensors.
    */
    void AvoidObstaclesWithProximitySensors();
@@ -106,6 +112,9 @@ private:
 
    /* Pointer to the new e-puck light sensor*/
    CCI_NewEPuckLightSensor* m_pcLight;
+
+   /* Pointer to the new e-puck Lidar sensor*/
+   CCI_NewEPuckLIDARSensor* m_pcLidar;
 
    /*
     * The following variables are used as parameters for the
