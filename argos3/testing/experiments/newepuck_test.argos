@@ -17,8 +17,9 @@
   <!-- *************** -->
   <controllers>
 
+    <!-- set the ARGOS_PLUGIN_PATH: /Users/paolo/argos3-custom-robot/build -->
     <newepuck_test_controller id="fdc"
-                                        library="build/argos3/testing/controllers/newepuck_test/libnewepuck_test.so">
+                                        library="argos3/testing/controllers/newepuck_test/libnewepuck_test.so">
       <actuators>
         <differential_steering implementation="default" />
       </actuators>
