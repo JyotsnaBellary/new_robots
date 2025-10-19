@@ -2,7 +2,7 @@
 # New e-puck plugin (macOS/Qt6 friendly)
 # ============================================
 
-# Sorgenti/headers comuni (headless + gui)
+
 set(ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_CONTROLINTERFACE
   control_interface/ci_newepuck_proximity_sensor.h
   control_interface/ci_newepuck_lidar_sensor.h
@@ -32,8 +32,7 @@ set(ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK
   simulator/newepuck_proximity_default_sensor.cpp
 )
 
-# Opzione per abilitare la GUI (di default ON se ARGoS la espone)
-# ARGoS di solito definisce ARGOS_QTOPENGL_FOUND nella sua config.
+
 option(NEWEPUCK_WITH_QTOPENGL "Build QtOpenGL renderer for NewEPuck" ${ARGOS_QTOPENGL_FOUND})
 
 if(NEWEPUCK_WITH_QTOPENGL)
@@ -45,7 +44,7 @@ endif()
 
 add_library(argos3plugin_simulator_newepuck SHARED ${ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK})
 
-# --- Link base (senza duplicati) ---
+
 target_link_libraries(argos3plugin_simulator_newepuck
   PRIVATE
     argos3core_simulator
@@ -55,9 +54,9 @@ target_link_libraries(argos3plugin_simulator_newepuck
     argos3plugin_simulator_media
 )
 
-# --- GUI: linka plugin QtOpenGL di ARGoS + Qt6 modern targets ---
+
 if(NEWEPUCK_WITH_QTOPENGL)
-  # Se usi Qt6 (come nel tuo log)
+  
   find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets Widgets Gui)
   target_link_libraries(argos3plugin_simulator_newepuck
     PRIVATE
@@ -66,10 +65,10 @@ if(NEWEPUCK_WITH_QTOPENGL)
       Qt6::Widgets
       Qt6::Gui
   )
-  # (Niente ${QT_LIBRARIES}, ${GLUT_LIBRARY}, ${OPENGL_LIBRARY} – non servono con Qt6 modern)
+  
 endif()
 
-# Esporta include per chi installa gli headers
+
 install(FILES ${ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_CONTROLINTERFACE}
         DESTINATION include/argos3/plugins/robots/newepuck/control_interface)
 install(FILES ${ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_SIMULATOR}
@@ -80,5 +79,5 @@ install(TARGETS argos3plugin_simulator_newepuck
   LIBRARY DESTINATION lib/argos3
   ARCHIVE DESTINATION lib/argos3)
 
-# Aggiorna ARGOS_PLUGIN_PATH per il runtime
+# Update the ARGOS_PLUGIN_PATH
 set(ARGOS_PLUGIN_PATH "${ARGOS_PLUGIN_PATH}:${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "ARGoS plugin path")
