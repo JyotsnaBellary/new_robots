@@ -37,7 +37,8 @@
 <!-- ****************** -->
   <!-- * Loop functions * -->
   <!-- ****************** -->
-  <loop_functions library="build/argos3/testing/loop_functions/test_loop_functions/libtest_loop_functions"
+   <!-- set the ARGOS_PLUGIN_PATH: /Users/paolo/argos3-custom-robot/build -->
+  <loop_functions library="argos3/testing/loop_functions/test_loop_functions/libtest_loop_functions"
                   label="test_loop_functions">
     <testing />
   </loop_functions>
