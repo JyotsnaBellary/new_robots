@@ -12,7 +12,7 @@ set(ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_CONTROLINTERFACE
 
 set(ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_SIMULATOR
   simulator/dynamics2d_newepuck_model.h
-  #simulator/dynamics3d_newepuck_model.h
+  simulator/dynamics3d_newepuck_model.h
   simulator/newepuck_light_rotzonly_sensor.h
   simulator/newepuck_lidar_default_sensor.h
   simulator/newepuck_proximity_default_sensor.h
@@ -28,7 +28,7 @@ set(ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK
   control_interface/ci_newepuck_base_ground_sensor.cpp
   ${ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_SIMULATOR}
   simulator/dynamics2d_newepuck_model.cpp
-  #simulator/dynamics3d_newepuck_model.cpp
+  simulator/dynamics3d_newepuck_model.cpp
   simulator/newepuck_light_rotzonly_sensor.cpp
   simulator/newepuck_lidar_default_sensor.cpp
   simulator/newepuck_entity.cpp
@@ -46,8 +46,16 @@ if(NEWEPUCK_WITH_QTOPENGL)
     simulator/qtopengl_newepuck.cpp)
 endif()
 
+
+# Detect Bullet (Homebrew provides a CMake config for it)
+find_package(Bullet REQUIRED)  # provides BULLET_LIBRARIES, BULLET_INCLUDE_DIRS
+
 add_library(argos3plugin_simulator_newepuck SHARED ${ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK})
 
+target_include_directories(argos3plugin_simulator_newepuck
+  PRIVATE
+    ${BULLET_INCLUDE_DIRS}             # Needed by dynamics3d model
+)
 
 target_link_libraries(argos3plugin_simulator_newepuck
   PRIVATE
@@ -56,7 +64,17 @@ target_link_libraries(argos3plugin_simulator_newepuck
     argos3plugin_simulator_entities
     argos3plugin_simulator_genericrobot
     argos3plugin_simulator_media
+    
+    # --- add these for 3D ---
+    argos3plugin_simulator_dynamics3d  # ARGoS 3D engine (provides CDynamics3D*, multibody base classes)
+    ${BULLET_LIBRARIES}                # BulletDynamics BulletCollision LinearMath
 )
+
+target_compile_definitions(argos3plugin_simulator_newepuck
+  PRIVATE
+    BT_USE_DOUBLE_PRECISION
+)
+
 
 
 if(NEWEPUCK_WITH_QTOPENGL)
