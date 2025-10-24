@@ -17,6 +17,7 @@ namespace argos {
 #else
 #include <GL/gl.h>
 #endif
+#include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_obj_model.h>
 
 namespace argos {
 
@@ -75,6 +76,7 @@ namespace argos {
 
       /* Angle gap between two leds */
       GLfloat m_fLEDAngleSlice;
+      CQTOpenGLObjModel m_cBodyModel;
 
    };
 

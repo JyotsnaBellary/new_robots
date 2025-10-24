@@ -41,6 +41,7 @@ namespace argos {
       virtual void RemoveFromWorld(btMultiBodyDynamicsWorld& c_world);
 
    private:
+
       /* joint constraints */
       std::unique_ptr<btMultiBodyJointMotor> m_ptrLeftMotor;
       std::unique_ptr<btMultiBodyJointMotor> m_ptrRightMotor;
