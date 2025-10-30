@@ -50,7 +50,7 @@ namespace argos {
          Real fNoiseLevel = 0.0f;
          GetNodeAttributeOrDefault(t_tree, "noise_level", fNoiseLevel, fNoiseLevel);
          if(fNoiseLevel < 0.0f) {
-            THROW_ARGOSEXCEPTION("Can't specify a negative value for the noise level of the new_e-puck ground sensor");
+            THROW_ARGOSEXCEPTION("Can't specify a negative value for the noise level of the turtlebot4 ground sensor");
          }
          else if(fNoiseLevel > 0.0f) {
             m_bAddNoise = true;
@@ -62,7 +62,7 @@ namespace argos {
          Enable();
       }
       catch(CARGoSException& ex) {
-         THROW_ARGOSEXCEPTION_NESTED("Initialization error in new_e-puck rotzonly ground sensor", ex);
+         THROW_ARGOSEXCEPTION_NESTED("Initialization error in turtlebot4 rotzonly ground sensor", ex);
       }
    }
 
@@ -122,8 +122,8 @@ namespace argos {
                    "turtlebot4_ground", "rot_z_only",
                    "Carlo Pinciroli [ilpincy@gmail.com]",
                    "1.0",
-                   "The new_e-puck base ground sensor.",
-                   "This sensor accesses the new_e-puck base ground sensor. For a complete description\n"
+                   "The turtlebot4 base ground sensor.",
+                   "This sensor accesses the turtlebot4 base ground sensor. For a complete description\n"
                    "of its usage, refer to the ci_turtlebot4_base_ground_sensor.h interface. For the XML\n"
                    "configuration, refer to the default ground sensor.\n",
                    "Usable"

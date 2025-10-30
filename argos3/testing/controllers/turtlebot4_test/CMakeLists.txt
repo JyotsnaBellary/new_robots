@@ -1,0 +1,6 @@
+add_library(turtlebot4_shared_test STATIC turtlebot4_test.h turtlebot4_test.cpp)
+add_library(turtlebot4_test MODULE turtlebot4_test.h turtlebot4_test.cpp)
+target_link_libraries(turtlebot4_test
+  argos3core_simulator
+  argos3plugin_simulator_turtlebot4
+  argos3plugin_simulator_genericrobot)

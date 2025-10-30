@@ -1,8 +1,6 @@
 #include "test_loop_functions.h"
 #include <argos3/core/simulator/simulator.h>
 #include <argos3/core/utility/configuration/argos_configuration.h>
-#include <argos3/plugins/robots/newepuck/simulator/newepuck_entity.h>
-#include <argos3/testing/controllers/newepuck_test/newepuck_test.h>
 using namespace argos;
 using namespace std;
 

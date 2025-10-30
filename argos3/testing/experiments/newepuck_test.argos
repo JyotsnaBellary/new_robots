@@ -44,7 +44,7 @@
   <!-- *********************** -->
   <!-- * Arena configuration * -->
   <!-- *********************** -->
-  <arena size="5, 5, 1" center="0,0,0.5">
+  <!-- <arena size="5, 5, 1" center="0,0,0.5">
 
     <floor id="floor"
            source="loop_functions"
@@ -61,6 +61,24 @@
     </box>
     <box id="wall_west" size="0.1,4,0.5" movable="false">
       <body position="-2,0,0" orientation="0,0,0" />
+    </box> -->
+<arena size="500, 500, 100" center="0,0,50">
+
+    <floor id="floor"
+           source="loop_functions"
+           pixels_per_meter="500" />
+
+    <box id="wall_north" size="480,10,50" movable="false">
+      <body position="0,190,-10" orientation="0,0,0" />
+    </box>
+    <box id="wall_south" size="480,10,50" movable="false">
+      <body position="0,-190,0" orientation="0,0,0" />
+    </box>
+    <box id="wall_east" size="10,480,50" movable="false">
+      <body position="190,0,0" orientation="0,0,0" />
+    </box>
+    <box id="wall_west" size="10,480,50" movable="false">
+      <body position="-190,0,0" orientation="0,0,0" />
     </box>
 
     <!--
@@ -73,7 +91,8 @@
         standard deviation is 360 degrees.
     -->
     <distribute>
-      <position method="uniform" min="-2,-2,0" max="2,2,0" />
+      <!-- <position method="uniform" min="-2,-2,0" max="2,2,0" /> -->
+      <position method="uniform" min="-200,-200,0" max="200,200,0" />
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
       <entity quantity="4" max_trials="100">
         <new_e-puck id="fb">
@@ -86,10 +105,12 @@
         We distribute 5 boxes uniformly in position and rotation around Z.
     -->
     <distribute>
-      <position method="uniform" min="-2,-2,0" max="2,2,0" />
+      <position method="uniform" min="-200,-200,0" max="200,200,0" />
+      <!-- <position method="uniform" min="-2,-2,0" max="2,2,0" /> -->
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
-      <entity quantity="6" max_trials="100">
-        <box id="b" size="0.3,0.3,0.5" movable="false" />
+      <entity quantity="2" max_trials="100">
+        <box id="b" size="30,30,50" movable="false" />
+        <!-- <box id="b" size="0.3,0.3,0.5" movable="false" /> -->
       </entity>
     </distribute>
 
@@ -99,15 +120,17 @@
         matter)
     -->
     <distribute>
-      <position method="uniform" min="-2,-2,0" max="2,2,0" />
+      <position method="uniform" min="-200,-200,0" max="200,200,0" />
+      <!-- <position method="uniform" min="-2,-2,0" max="2,2,0" /> -->
       <orientation method="constant" values="0,0,0" />
-      <entity quantity="6" max_trials="100">
-        <cylinder id="c" height="0.5" radius="0.15" movable="false" />
+      <entity quantity="1" max_trials="100">
+        <cylinder id="c" height="50" radius="15" movable="false" />
+        <!-- <cylinder id="c" height="0.5" radius="0.15" movable="false" /> -->
       </entity>
     </distribute>
 
     <light id="light"
-           position="0,0,0.5"
+           position="0,0,50"
            orientation="0,0,0"
            color="yellow"
            intensity="3.0"
@@ -136,7 +159,8 @@
     <qt-opengl>
       <camera>
         <placements>
-          <placement index="0" position="0,0,13" look_at="0,0,0" up="1,0,0" lens_focal_length="65" />
+          <!-- <placement index="0" position="0,0,13" look_at="0,0,0" up="1,0,0" lens_focal_length="65" /> -->
+          <placement index="0" position="0,0,500" look_at="0,0,0" up="100,0,0" lens_focal_length="25" />
         </placements>
       </camera>
     </qt-opengl>
