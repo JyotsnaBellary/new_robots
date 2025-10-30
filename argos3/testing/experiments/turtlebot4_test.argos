@@ -44,25 +44,42 @@
   <!-- *********************** -->
   <!-- * Arena configuration * -->
   <!-- *********************** -->
-  <arena size="500, 500, 100" center="0,0,50">
+  <!-- <arena size="500, 500, 10" center="0,0,5">
 
     <floor id="floor"
            source="loop_functions"
            pixels_per_meter="500" />
 
-    <box id="wall_north" size="480,10,50" movable="false">
-      <body position="-30,190,0" orientation="0,0,0" />
+    <box id="wall_north" size="500,10,10" movable="false">
+      <body position="0,250,0" orientation="0,0,0" />
     </box>
-    <box id="wall_south" size="480,10,50" movable="false">
-      <body position="0,-190,0" orientation="0,0,0" />
+    <box id="wall_south" size="500,10,10" movable="false">
+      <body position="0,-250,0" orientation="0,0,0" />
     </box>
-    <box id="wall_east" size="10,480,50" movable="false">
-      <body position="190,0,0" orientation="0,0,0" />
+    <box id="wall_east" size="10,500,10" movable="false">
+      <body position="250,0,0" orientation="0,0,0" />
     </box>
-    <box id="wall_west" size="10,400,50" movable="false">
-      <body position="-190,0,0" orientation="0,0,0" />
-    </box>
+    <box id="wall_west" size="10,500,10" movable="false">
+      <body position="-250,0,0" orientation="0,0,0" />
+    </box> -->
+    <arena size="300, 300, 10" center="0,0,5">
 
+    <floor id="floor"
+           source="loop_functions"
+           pixels_per_meter="500" />
+
+    <box id="wall_north" size="300,10,10" movable="false">
+      <body position="0,150,0" orientation="0,0,0" />
+    </box>
+    <box id="wall_south" size="300,10,10" movable="false">
+      <body position="0,-150,0" orientation="0,0,0" />
+    </box>
+    <box id="wall_east" size="10,300,10" movable="false">
+      <body position="150,0,0" orientation="0,0,0" />
+    </box>
+    <box id="wall_west" size="10,300,10" movable="false">
+      <body position="-150,0,0" orientation="0,0,0" />
+    </box>
 
     <!--
         You can distribute entities randomly. Here, we distribute
@@ -74,9 +91,11 @@
         standard deviation is 360 degrees.
     -->
     <distribute>
-      <position method="uniform" min="-200,-200,0" max="200,200,0" />
+      <position method="uniform" min="-100,-100,0" max="100,100,0" />
+
+      <!-- <position method="uniform" min="-200,-200,0" max="200,200,0" /> -->
       <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
-      <entity quantity="4" max_trials="100">
+      <entity quantity="2" max_trials="100">
         <turtlebot4 id="fb">
           <controller config="fdc" />
         </turtlebot4>
@@ -87,7 +106,9 @@
         We distribute 5 boxes uniformly in position and rotation around Z.
     -->
     <distribute>
-      <position method="uniform" min="-200,-200,0" max="200,200,0" />
+      <position method="uniform" min="-100,-100,0" max="100,100,0" />
+
+      <!-- <position method="uniform" min="-200,-200,0" max="200,200,0" /> -->
       <!-- <position method="uniform" min="-2,-2,0" max="2,2,0" /> -->
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
       <entity quantity="1" max_trials="100">
@@ -102,7 +123,9 @@
         matter)
     -->
     <distribute>
-      <position method="uniform" min="-200,-200,0" max="200,200,0" />
+      <position method="uniform" min="-100,-100,0" max="100,100,0" />
+
+      <!-- <position method="uniform" min="-200,-200,0" max="200,200,0" /> -->
       <!-- <position method="uniform" min="-2,-2,0" max="2,2,0" /> -->
       <orientation method="constant" values="0,0,0" />
       <entity quantity="1" max_trials="100">
@@ -111,7 +134,7 @@
     </distribute>
 
     <light id="light"
-           position="0,0,50"
+           position="0,0,0"
            orientation="0,0,0"
            color="yellow"
            intensity="3"
@@ -140,7 +163,9 @@
     <qt-opengl>
       <camera>
         <placements>
-          <placement index="0" position="0,0,500" look_at="0,0,0" up="100,0,0" lens_focal_length="25" />
+          <!-- <placement index="0" position="0,0,0" look_at="0,0,0" up="100,0,0" lens_focal_length="25" /> -->
+          <placement index="0" position="-100,10,100" look_at="0,0,0" up="100,0,0" lens_focal_length="25" />
+
         </placements>
       </camera>
     </qt-opengl>
