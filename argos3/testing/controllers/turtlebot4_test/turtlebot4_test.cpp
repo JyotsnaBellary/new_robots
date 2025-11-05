@@ -12,7 +12,7 @@ CTurtlebot4Test::CTurtlebot4Test() :
    // m_pcProximity(NULL),
    m_pcGround(NULL), 
    // m_pcLight(NULL),
-   m_fWheelVelocity(2.5f) {}
+   m_fWheelVelocity(-2.5f) {}
 
 /****************************************/
 /****************************************/

@@ -15,12 +15,19 @@ namespace argos {
 
    static const Real TURTLEBOT4_MASS                = 0.4f;
 
-   static const Real TURTLEBOT4_RADIUS              = 0.035f;
-   static const Real TURTLEBOT4_INTERWHEEL_DISTANCE = 0.053f;
-   static const Real TURTLEBOT4_HEIGHT              = 0.086f;
+   // static const Real TURTLEBOT4_RADIUS              = 0.035f;
+   static const Real TURTLEBOT4_BASE_RADIUS              = 0.338; // or 162?
 
-   static const Real TURTLEBOT4_MAX_FORCE           = 1.5f;
-   static const Real TURTLEBOT4_MAX_TORQUE          = 1.5f;
+   static const Real TURTLEBOT4_WHEEL_DISTANCE = 0.235; // from create3 
+   static const Real TURTLEBOT4_WHEEL_RADIUS        = 0.036; 
+   const Real TURTLEBOT3_BASE_ELEVATION = 0.045;
+   static const Real TURTLEBOT4_BASE_HEIGHT    = 0.351f;
+
+   static const Real TURTLEBOT4_BASE_TOP       = TURTLEBOT3_BASE_ELEVATION + TURTLEBOT4_BASE_HEIGHT;
+
+
+   static const Real TURTLEBOT4_MAX_FORCE           = 1.5f; // Need it
+   static const Real TURTLEBOT4_MAX_TORQUE          = 1.5f; // Need it
 
    enum TURTLEBOT4_WHEELS {
       TURTLEBOT4_LEFT_WHEEL = 0,
@@ -38,7 +45,7 @@ namespace argos {
       m_cDiffSteering(c_engine,
                       TURTLEBOT4_MAX_FORCE,
                       TURTLEBOT4_MAX_TORQUE,
-                      TURTLEBOT4_INTERWHEEL_DISTANCE,
+                      TURTLEBOT4_WHEEL_DISTANCE,
                       c_entity.GetConfigurationNode()),
       m_fCurrentWheelVelocity(m_cWheeledEntity.GetWheelVelocities()) {
       /* Create the body with initial position and orientation */
@@ -47,7 +54,7 @@ namespace argos {
                         cpBodyNew(TURTLEBOT4_MASS,
                                   cpMomentForCircle(TURTLEBOT4_MASS,
                                                     0.0f,
-                                                    TURTLEBOT4_RADIUS + TURTLEBOT4_RADIUS,
+                                                    TURTLEBOT4_BASE_RADIUS + TURTLEBOT4_BASE_RADIUS,
                                                     cpvzero)));
       const CVector3& cPosition = GetEmbodiedEntity().GetOriginAnchor().Position;
       ptBody->p = cpv(cPosition.GetX(), cPosition.GetY());
@@ -58,14 +65,14 @@ namespace argos {
       cpShape* ptShape =
          cpSpaceAddShape(GetDynamics2DEngine().GetPhysicsSpace(),
                          cpCircleShapeNew(ptBody,
-                                          TURTLEBOT4_RADIUS,
+                                          TURTLEBOT4_BASE_RADIUS,
                                           cpvzero));
       ptShape->e = 0.0; // No elasticity
       ptShape->u = 0.7; // Lots of friction
       /* Constrain the actual base body to follow the diff steering control */
       m_cDiffSteering.AttachTo(ptBody);
       /* Set the body so that the default methods work as expected */
-      SetBody(ptBody, TURTLEBOT4_HEIGHT);
+      SetBody(ptBody, TURTLEBOT4_BASE_TOP);
    }
 
    /****************************************/

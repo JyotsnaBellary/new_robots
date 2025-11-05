@@ -27,16 +27,16 @@ namespace argos {
    /****************************************/
 
    static UInt8 TURTLEBOT4_POWERON_LASERON   = 3;
-   const Real TURTLEBOT4_BASE_ELEVATION = 0.009;
-   const Real TURTLEBOT4_BASE_RADIUS    = 0.08;
-   const Real TURTLEBOT4_BASE_HEIGHT    = 0.192;
+   const Real TURTLEBOT4_BASE_ELEVATION = 0.045;
+   const Real TURTLEBOT4_BASE_RADIUS    = 0.338;
+   const Real TURTLEBOT4_BASE_HEIGHT    = 0.351f;
    const Real TURTLEBOT4_BASE_TOP       = TURTLEBOT4_BASE_ELEVATION + TURTLEBOT4_BASE_HEIGHT;
    const Real TURTLEBOT4_LIDAR_CENTER_ELEVATION   = -0.01;  // Lidar hight is considered in the robot height
 
    const Real TURTLEBOT4_LIDAR_ELEVATION = TURTLEBOT4_BASE_TOP + TURTLEBOT4_LIDAR_CENTER_ELEVATION;
    const Real TURTLEBOT4_LIDAR_SENSORS_FAN_RADIUS = TURTLEBOT4_BASE_RADIUS;
 
-   const CRange<Real> TURTLEBOT4_LIDAR_SENSORS_RING_RANGE;
+   const CRange<Real> TURTLEBOT4_LIDAR_SENSORS_RING_RANGE(0.15f, 12.00f);
    const CRadians TURTLEBOT4_LIDAR_ANGLE_SPAN(ToRadians(CDegrees(360.0)));
 
 

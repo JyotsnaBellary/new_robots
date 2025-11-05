@@ -22,12 +22,12 @@ namespace argos {
    /****************************************/
    /****************************************/
 
-   static const Real BODY_RADIUS                = 0.035f;
-   static const Real BODY_HEIGHT                = 0.086f;
+   static const Real BODY_RADIUS                = 0.338F;
+   static const Real BODY_HEIGHT                = 0.351f;
 
-   static const Real INTERWHEEL_DISTANCE        = 0.053f;
+   static const Real INTERWHEEL_DISTANCE        = 0.235;
    static const Real HALF_INTERWHEEL_DISTANCE   = INTERWHEEL_DISTANCE * 0.5f;
-   static const Real WHEEL_RADIUS               = 0.0205f;
+   static const Real WHEEL_RADIUS               = 0.036;
 
    static const Real PROXIMITY_SENSOR_RING_ELEVATION       = 0.06f;
    static const Real PROXIMITY_SENSOR_RING_RADIUS          = BODY_RADIUS;
