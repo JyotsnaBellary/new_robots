@@ -11,6 +11,7 @@ CTurtlebot4Test::CTurtlebot4Test() :
    m_pcWheels(NULL),
    // m_pcProximity(NULL),
    m_pcGround(NULL), 
+   m_pcCamera(NULL),
    // m_pcLight(NULL),
    m_fWheelVelocity(-2.5f) {}
 
@@ -46,6 +47,8 @@ void CTurtlebot4Test::Init(TConfigurationNode& t_node) {
    // m_pcLight = GetSensor  <CCI_Turtlebot4LightSensor>("turtlebot4_light");
    m_pcGround = GetSensor  <CCI_Turtlebot4BaseGroundSensor>("turtlebot4_ground");
    m_pcLidar = GetSensor  <CCI_Turtlebot4LIDARSensor    >("turtlebot4_lidar"  );
+   m_pcCamera  = GetSensor  <CCI_ColoredBlobPerspectiveCameraSensor>("turtlebot4_colored_blob_perspective_camera");
+   m_pcCamera->Enable();
 
    const auto& tReadings = m_pcGround->GetReadings();
    
@@ -88,8 +91,10 @@ void CTurtlebot4Test::LogGroundSensorReadings() const {
 
     /* Determine how many sensors are in "white" (close to 1.0) */
     size_t unWhiteCount = 0;
+    cout << "Number of Ground Readings: " << tGroundReads.size() << endl;
     for(size_t i = 0; i < tGroundReads.size(); ++i) {
         if(tGroundReads[i].Value > 0.8f) {   // 0.8 threshold for "white"
+            std::cout << "not white detected at sensor " << i << " with value " << tGroundReads[i].Value << std::endl;
             ++unWhiteCount;
         }
     }
@@ -116,13 +121,28 @@ void CTurtlebot4Test::LogLidarSensorReadings() const {
 
 }
 
+/****************************************/
+/****************************************/
+
+void CTurtlebot4Test::LogLightUsingCameraSensorReadings() const {
+    /* Perspective Camera */
+   const CCI_ColoredBlobPerspectiveCameraSensor::SReadings& sReadings = m_pcCamera->GetReadings();
+   LOG << CCI_Controller::GetId() << "> Camera: " << std::endl;
+   LOG << "Number of blobs detected: " << sReadings.BlobList.size() << std::endl;
+   LOG << "Counter: " << sReadings.Counter << std::endl;
+   for (size_t i = 0; i < sReadings.BlobList.size(); i++) {
+         CCI_ColoredBlobPerspectiveCameraSensor::SBlob* sBlob = sReadings.BlobList[i];
+      LOG << ".....(Color = " << sBlob->Color << ", X = " << sBlob->X << ",Y = " << sBlob->Y << ")" << std::endl;
+   }
+}
+
 
 /****************************************/
 /****************************************/
 
 void CTurtlebot4Test::AvoidObstaclesWithProximitySensors() {
    const auto& readings = m_pcProximity->GetReadings();
-
+   std::cout << "Avoiding obstacles with proximity sensors..." << std::endl;
    if(readings.empty()) {
       THROW_ARGOSEXCEPTION("Proximity sensor returned no readings");
    }
@@ -135,38 +155,58 @@ void CTurtlebot4Test::AvoidObstaclesWithProximitySensors() {
 
    /* Get the highest reading in front of the robot, which corresponds to the closest object */
    // Start with index 0
-   Real fMaxReadVal = readings[0].Value;
+   const std::string& strId = GetId();
+   std::cout << strId << " | " << endl;
+
+   Real IRvalue_0 = readings[0].Value;
+   Real IRvalue_1 = readings[1].Value;
+   Real IRvalue_2 = readings[2].Value;
+   Real IRvalue_3 = readings[3].Value;
+   Real IRvalue_4 = readings[4].Value;
+   Real IRvalue_5 = readings[5].Value;
+   Real IRvalue_6 = readings[6].Value;
+   Real fMaxReadVal = 0.0f;
    UInt32 unMaxReadIdx = 0;
 
+   argos::LOG << "IRvalue_0: " << IRvalue_0 << std::endl;
+   argos::LOG << "IRvalue_1: " << IRvalue_1 << std::endl;
+   argos::LOG << "IRvalue_2: " << IRvalue_2 << std::endl;
+   argos::LOG << "IRvalue_3: " << IRvalue_3 << std::endl;
+   argos::LOG << "IRvalue_4: " << IRvalue_4 << std::endl;
+   argos::LOG << "IRvalue_5: " << IRvalue_5 << std::endl;
+   argos::LOG << "IRvalue_6: " << IRvalue_6 << std::endl;
+
    // Check indices 1, 7, and 6 (front left and right sensors)
-   if(fMaxReadVal < readings[1].Value) {
-      fMaxReadVal = readings[1].Value;
-      unMaxReadIdx = 1;
-   }
-   if(fMaxReadVal < readings[7].Value) {
-      fMaxReadVal = readings[7].Value;
-      unMaxReadIdx = 7;
-   }
-   if(fMaxReadVal < readings[6].Value) {
-      fMaxReadVal = readings[6].Value;
-      unMaxReadIdx = 6;
-   }
+   // if(fMaxReadVal < IRvalue_2 || fMaxReadVal < IRvalue_3 || fMaxReadVal < IRvalue_4) {
+   //    m_pcWheels->SetLinearVelocity(m_fWheelVelocity, 0.0f);
+
+   // }
+   // if(fMaxReadVal < IRvalue_5 || fMaxReadVal < IRvalue_6) {
+   //    fMaxReadVal = IRvalue_5;
+   //    unMaxReadIdx = 5;
+   // }
+   // if(fMaxReadVal < IRvalue_0 || fMaxReadVal < IRvalue_1) {
+   //    fMaxReadVal = IRvalue_0;
+   //    unMaxReadIdx = 1;
+   // }
 
    /* Do we have an obstacle in front? */
-   if(fMaxReadVal > 0.0f) {
+   if(IRvalue_2 > 0.0f || IRvalue_3 > 0.0f || IRvalue_4 > 0.0f || IRvalue_5 > 0.0f || IRvalue_6 > 0.0f) {
      /* Yes, we do: avoid it */
-     if(unMaxReadIdx == 0 || unMaxReadIdx == 1) {
-       /* The obstacle is on the left, turn right */
+   //   if(unMaxReadIdx == 1 || unMaxReadIdx == 3) {
+       /* The obstacle is straight, turn left */
        m_pcWheels->SetLinearVelocity(m_fWheelVelocity, 0.0f);
-     }
-     else {
-       /* The obstacle is on the left, turn right */
-       m_pcWheels->SetLinearVelocity(0.0f, m_fWheelVelocity);
-     }
+   //   }
+   //   else if (unMaxReadIdx == 5) {
+   //     /* The obstacle is on the right, turn right */
+   //     m_pcWheels->SetLinearVelocity(0.0f, m_fWheelVelocity);
+   //   }
    }
    else {
      /* No, we don't: go straight */
+       argos::LOG << "obj straight unMaxReadIdx set to both wheels: " << m_fWheelVelocity << std::endl;
       m_pcWheels->SetLinearVelocity(m_fWheelVelocity, m_fWheelVelocity);
+      // Real angularVel = m_pcWheels-
    }
 
 }
@@ -181,8 +221,9 @@ void CTurtlebot4Test::ControlStep() {
    LogGroundSensorReadings();
    // --- Light sensor debug ---
    // LogLightReadings();
+   LogLightUsingCameraSensorReadings();
 
-   LogLidarSensorReadings();
+   // LogLidarSensorReadings();
 }
 
 /****************************************/

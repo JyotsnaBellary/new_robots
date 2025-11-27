@@ -14,7 +14,10 @@ set(ARGOS3_HEADERS_PLUGINS_ROBOTS_TURTLEBOT4_SIMULATOR
     simulator/turtlebot4_base_ground_rotzonly_sensor.h
     simulator/turtlebot4_lidar_default_sensor.h
     simulator/turtlebot4_proximity_default_sensor.h
+    simulator/turtlebot4_colored_blob_perspective_camera_default_sensor.h
     simulator/turtlebot4_entity.h
+    simulator/turtlebot4_measures.h
+
     )
     
 #
@@ -35,7 +38,9 @@ set(ARGOS3_SOURCES_PLUGINS_ROBOTS_TURTLEBOT4
   simulator/turtlebot4_base_ground_rotzonly_sensor.cpp
   simulator/turtlebot4_lidar_default_sensor.cpp
   simulator/turtlebot4_proximity_default_sensor.cpp
+  simulator/turtlebot4_colored_blob_perspective_camera_default_sensor.cpp
   simulator/turtlebot4_entity.cpp
+    simulator/turtlebot4_measures.cpp
 )
 
 #

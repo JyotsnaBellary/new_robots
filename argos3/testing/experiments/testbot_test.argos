@@ -17,20 +17,20 @@
   <!-- *************** -->
   <controllers>
 
-    <turtlebot4_test_controller id="fdc"
-                                        library="build/argos3/testing/controllers/turtlebot4_test/libturtlebot4_test.so">
+    <testbot_test_controller id="fdc"
+                                        library="build/argos3/testing/controllers/testbot_test/libtestbot_test.so">
       <actuators>
         <differential_steering implementation="default" />
-        <leds implementation="default" medium="leds" />
       </actuators>
       <sensors>
-        <turtlebot4_ground                       implementation="rot_z_only" />
-        <turtlebot4_proximity implementation="default" show_rays="true" />
-        <turtlebot4_lidar implementation="default" num_readings="360" show_rays="false" />
-        <turtlebot4_colored_blob_perspective_camera implementation="default" medium="leds" show_rays="true" />
+        <!-- <newepuck_light                       implementation="rot_z_only" show_rays="true" />
+        <newepuck_ground                       implementation="rot_z_only" />
+        <newepuck_proximity implementation="default" show_rays="true" />
+        <newepuck_lidar implementation="default" num_readings="360" show_rays="true" /> -->
+        <!-- <colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" /> -->
       </sensors>
-      <params velocity="6.0" />
-    </turtlebot4_test_controller>
+      <params velocity="300" />
+    </testbot_test_controller>
 
   </controllers>
 
@@ -45,8 +45,7 @@
   <!-- *********************** -->
   <!-- * Arena configuration * -->
   <!-- *********************** -->
-    
- <arena size="5, 5, 1" center="0,0,0.5">
+  <arena size="5, 5, 1" center="0,0,0.5">
 
     <floor id="floor"
            source="loop_functions"
@@ -64,9 +63,10 @@
     <box id="wall_west" size="0.1,4,0.5" movable="false">
       <body position="-2,0,0" orientation="0,0,0" />
     </box>
-<!--     
+
+    <!--
         You can distribute entities randomly. Here, we distribute
-        10 turtlebot4's in this way:
+        10 e-pucks in this way:
         - the position is uniformly distributed
         on the ground, in the square whose corners are (-2,-2) and (2,2)
         - the orientations are non-zero only when rotating around Z and chosen
@@ -75,12 +75,11 @@
     -->
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
-      <orientation method="gaussian" mean="0,0,0" std_dev="90,0,0" />
-      <entity quantity="5" max_trials="100">
-        <turtlebot4 id="fb">
+      <orientation method="gaussian" mean="0,0,0" std_dev="360,0,0" />
+      <entity quantity="4" max_trials="100">
+        <testbot id="fb">
           <controller config="fdc" />
-          
-        </turtlebot4>
+        </testbot>
       </entity>
     </distribute>
 
@@ -90,7 +89,7 @@
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
-      <entity quantity="3" max_trials="100">
+      <entity quantity="2" max_trials="100">
         <box id="b" size="0.3,0.3,0.5" movable="false" />
       </entity>
     </distribute>
@@ -103,10 +102,18 @@
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="constant" values="0,0,0" />
-      <entity quantity="3" max_trials="100">
+      <entity quantity="1" max_trials="100">
         <cylinder id="c" height="0.5" radius="0.15" movable="false" />
       </entity>
     </distribute>
+
+    <light id="light"
+           position="0,0,0.5"
+           orientation="0,0,0"
+           color="yellow"
+           intensity="10.0"
+           medium="leds" />
+
   </arena>
 
   <!-- ******************* -->
@@ -131,6 +138,7 @@
       <camera>
         <placements>
           <placement index="0" position="0,0,13" look_at="0,0,0" up="1,0,0" lens_focal_length="65" />
+          <!-- <placement index="0" position="-100,10,100" look_at="0,0,0" up="100,0,0" lens_focal_length="25" /> -->
         </placements>
       </camera>
     </qt-opengl>

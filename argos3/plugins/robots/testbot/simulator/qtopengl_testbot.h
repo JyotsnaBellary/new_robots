@@ -1,15 +1,15 @@
 /**
- * @file <turtlebot4/simulator/qtopengl_turtlebot4.h>
+ * @file <testbot/simulator/qtopengl_testbot.h>
  *
  * @author Carlo Pinciroli - <ilpincy@gmail.com>
  */
 
-#ifndef QTOPENGL_TURTLEBOT4_H
-#define QTOPENGL_TURTLEBOT4_H
+#ifndef QTOPENGL_TESTBOT_H
+#define QTOPENGL_TESTBOT_H
 
 namespace argos {
-   class CQTOpenGLTurtlebot4;
-   class CTurtlebot4Entity;
+   class CQTOpenGLTestBot;
+   class CTestBotEntity;
 }
 
 #ifdef __APPLE__
@@ -20,15 +20,15 @@ namespace argos {
 
 namespace argos {
 
-   class CQTOpenGLTurtlebot4 {
+   class CQTOpenGLTestBot {
 
    public:
 
-      CQTOpenGLTurtlebot4();
+      CQTOpenGLTestBot();
 
-      virtual ~CQTOpenGLTurtlebot4();
+      virtual ~CQTOpenGLTestBot();
 
-      virtual void Draw(CTurtlebot4Entity& c_entity);
+      virtual void Draw(CTestBotEntity& c_entity);
 
    protected:
 
@@ -58,24 +58,12 @@ namespace argos {
       /** Renders the columns */
       void RenderColumn();
 
-      /** Set Base Material */ 
-      void SetBaseMaterial();
-
-      /** Set deck Material */ 
-      void SetDeckMaterial();
-
-      /** Set Column Material */ 
-      void SetColumnMaterial();
-      
-      /** Set Wheel Material */
-      void SetWheelMaterial(); 
-
    private:
 
       /** Start of the display list index */
       GLuint m_unLists;
 
-      /** Turtlebot4 wheel */
+      /** Testbot wheel */
       GLuint m_unWheelList;
 
       /** Chassis display list */

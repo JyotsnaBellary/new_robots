@@ -21,7 +21,7 @@ namespace argos {
 
    /****************************************/
    /****************************************/
-
+   // should this be emodied entity or static?
    CTurtlebot4BaseGroundRotZOnlySensor::CTurtlebot4BaseGroundRotZOnlySensor() :
       m_pcEmbodiedEntity(nullptr),
       m_pcFloorEntity(nullptr),
@@ -57,7 +57,7 @@ namespace argos {
             m_cNoiseRange.Set(-fNoiseLevel, fNoiseLevel);
             m_pcRNG = CRandom::CreateRNG("argos");
          }
-         m_tReadings.resize(8);
+         m_tReadings.resize(4);
          /* sensor is enabled by default */
          Enable();
       }
@@ -89,7 +89,7 @@ namespace argos {
       /* Go through the sensors */
       for(UInt32 i = 0; i < m_tReadings.size(); ++i) {
          /* Calculate sensor position on the ground */
-         cSensorPos = m_pcGroundSensorEntity->GetSensor(i+4).Offset;
+         cSensorPos = m_pcGroundSensorEntity->GetSensor(i).Offset;
          cSensorPos.Rotate(cRotZ);
          cSensorPos += cCenterPos;
          /* Get the color */

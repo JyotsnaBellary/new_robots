@@ -1,61 +1,53 @@
 /**
- * @file <turtlebot4/simulator/dynamics2d_turtlebot4_model.cpp>
+ * @file <testbot/simulator/dynamics2d_testbot_model.cpp>
  *
  * @author Carlo Pinciroli - <ilpincy@gmail.com>
  */
 
-#include "dynamics2d_turtlebot4_model.h"
+#include "dynamics2d_testbot_model.h"
 #include <argos3/plugins/simulator/physics_engines/dynamics2d/dynamics2d_gripping.h>
 #include <argos3/plugins/simulator/physics_engines/dynamics2d/dynamics2d_engine.h>
-#include "turtlebot4_measures.h"
 
 namespace argos {
 
    /****************************************/
    /****************************************/
 
-   // static const Real TURTLEBOT4_MASS                = 0.4f;
+   static const Real TESTBOT_MASS                = 0.4f;
 
-   // // static const Real TURTLEBOT4_RADIUS              = 0.035f;
-   // static const Real TURTLEBOT4_BASE_RADIUS              = 0.169; // or 162?
+   static const Real TESTBOT_RADIUS              = 0.035f;
+   static const Real TESTBOT_INTERWHEEL_DISTANCE = 0.053f;
+   static const Real TESTBOT_HEIGHT              = 0.086f;
 
-   // static const Real TURTLEBOT4_WHEEL_DISTANCE = 0.235; // from create3 
-   // static const Real TURTLEBOT4_WHEEL_RADIUS        = 0.036; 
-   // const Real TURTLEBOT3_BASE_ELEVATION = 0.045;
-   // static const Real TURTLEBOT4_BASE_HEIGHT    = 0.351f;
+   static const Real TESTBOT_MAX_FORCE           = 1.5f;
+   static const Real TESTBOT_MAX_TORQUE          = 1.5f;
 
-   // static const Real TURTLEBOT4_BASE_TOP       = TURTLEBOT3_BASE_ELEVATION + TURTLEBOT4_BASE_HEIGHT;
-
-
-   // static const Real TURTLEBOT4_MAX_FORCE           = 1.5f; // Need it
-   // static const Real TURTLEBOT4_MAX_TORQUE          = 1.5f; // Need it
-
-   enum TURTLEBOT4_WHEELS {
-      TURTLEBOT4_LEFT_WHEEL = 0,
-      TURTLEBOT4_RIGHT_WHEEL = 1
+   enum TESTBOT_WHEELS {
+      TESTBOT_LEFT_WHEEL = 0,
+      TESTBOT_RIGHT_WHEEL = 1
    };
 
    /****************************************/
    /****************************************/
 
-   CDynamics2DTurtlebot4Model::CDynamics2DTurtlebot4Model(CDynamics2DEngine& c_engine,
-                                                CTurtlebot4Entity& c_entity) :
+   CDynamics2DTestBotModel::CDynamics2DTestBotModel(CDynamics2DEngine& c_engine,
+                                                CTestBotEntity& c_entity) :
       CDynamics2DSingleBodyObjectModel(c_engine, c_entity),
-      m_cTurtlebot4Entity(c_entity),
-      m_cWheeledEntity(m_cTurtlebot4Entity.GetWheeledEntity()),
+      m_cTestBotEntity(c_entity),
+      m_cWheeledEntity(m_cTestBotEntity.GetWheeledEntity()),
       m_cDiffSteering(c_engine,
-                      TURTLEBOT4_MAX_FORCE,
-                      TURTLEBOT4_MAX_TORQUE,
-                      TURTLEBOT4_WHEEL_DISTANCE,
+                      TESTBOT_MAX_FORCE,
+                      TESTBOT_MAX_TORQUE,
+                      TESTBOT_INTERWHEEL_DISTANCE,
                       c_entity.GetConfigurationNode()),
       m_fCurrentWheelVelocity(m_cWheeledEntity.GetWheelVelocities()) {
       /* Create the body with initial position and orientation */
       cpBody* ptBody =
          cpSpaceAddBody(GetDynamics2DEngine().GetPhysicsSpace(),
-                        cpBodyNew(TURTLEBOT4_MASS,
-                                  cpMomentForCircle(TURTLEBOT4_MASS,
+                        cpBodyNew(TESTBOT_MASS,
+                                  cpMomentForCircle(TESTBOT_MASS,
                                                     0.0f,
-                                                    TURTLEBOT4_BASE_RADIUS + TURTLEBOT4_BASE_RADIUS,
+                                                    TESTBOT_RADIUS + TESTBOT_RADIUS,
                                                     cpvzero)));
       const CVector3& cPosition = GetEmbodiedEntity().GetOriginAnchor().Position;
       ptBody->p = cpv(cPosition.GetX(), cPosition.GetY());
@@ -66,27 +58,27 @@ namespace argos {
       cpShape* ptShape =
          cpSpaceAddShape(GetDynamics2DEngine().GetPhysicsSpace(),
                          cpCircleShapeNew(ptBody,
-                                          TURTLEBOT4_BASE_RADIUS,
+                                          TESTBOT_RADIUS,
                                           cpvzero));
       ptShape->e = 0.0; // No elasticity
       ptShape->u = 0.7; // Lots of friction
       /* Constrain the actual base body to follow the diff steering control */
       m_cDiffSteering.AttachTo(ptBody);
       /* Set the body so that the default methods work as expected */
-      SetBody(ptBody, TURTLEBOT4_BASE_TOP);
+      SetBody(ptBody, TESTBOT_HEIGHT);
    }
 
    /****************************************/
    /****************************************/
 
-   CDynamics2DTurtlebot4Model::~CDynamics2DTurtlebot4Model() {
+   CDynamics2DTestBotModel::~CDynamics2DTestBotModel() {
       m_cDiffSteering.Detach();
    }
 
    /****************************************/
    /****************************************/
 
-   void CDynamics2DTurtlebot4Model::Reset() {
+   void CDynamics2DTestBotModel::Reset() {
       CDynamics2DSingleBodyObjectModel::Reset();
       m_cDiffSteering.Reset();
    }
@@ -94,12 +86,12 @@ namespace argos {
    /****************************************/
    /****************************************/
 
-   void CDynamics2DTurtlebot4Model::UpdateFromEntityStatus() {
+   void CDynamics2DTestBotModel::UpdateFromEntityStatus() {
       /* Do we want to move? */
-      if((m_fCurrentWheelVelocity[TURTLEBOT4_LEFT_WHEEL] != 0.0f) ||
-         (m_fCurrentWheelVelocity[TURTLEBOT4_RIGHT_WHEEL] != 0.0f)) {
-         m_cDiffSteering.SetWheelVelocity(m_fCurrentWheelVelocity[TURTLEBOT4_LEFT_WHEEL],
-                                          m_fCurrentWheelVelocity[TURTLEBOT4_RIGHT_WHEEL]);
+      if((m_fCurrentWheelVelocity[TESTBOT_LEFT_WHEEL] != 0.0f) ||
+         (m_fCurrentWheelVelocity[TESTBOT_RIGHT_WHEEL] != 0.0f)) {
+         m_cDiffSteering.SetWheelVelocity(m_fCurrentWheelVelocity[TESTBOT_LEFT_WHEEL],
+                                          m_fCurrentWheelVelocity[TESTBOT_RIGHT_WHEEL]);
       }
       else {
          /* No, we don't want to move - zero all speeds */
@@ -110,7 +102,7 @@ namespace argos {
    /****************************************/
    /****************************************/
 
-   REGISTER_STANDARD_DYNAMICS2D_OPERATIONS_ON_ENTITY(CTurtlebot4Entity, CDynamics2DTurtlebot4Model);
+   REGISTER_STANDARD_DYNAMICS2D_OPERATIONS_ON_ENTITY(CTestBotEntity, CDynamics2DTestBotModel);
 
    /****************************************/
    /****************************************/

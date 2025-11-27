@@ -1,11 +1,11 @@
 /**
- * @file <turtlebot4/simulator/qtopengl_turtlebot4.cpp>
+ * @file <testbot/simulator/qtopengl_testbot.cpp>
  *
  * @author Carlo Pinciroli - <ilpincy@gmail.com>
  */
 
-#include "qtopengl_turtlebot4.h"
-#include "turtlebot4_entity.h"
+#include "qtopengl_testbot.h"
+#include "testbot_entity.h"
 #include <argos3/core/simulator/entity/embodied_entity.h>
 #include <argos3/core/utility/math/vector2.h>
 #include <argos3/core/utility/math/vector3.h>
@@ -27,6 +27,8 @@ namespace argos {
    static const Real INTERWHEEL_DISTANCE         = 0.053f;
    static const Real HALF_INTERWHEEL_DISTANCE    = TURTLEBOT4_HALF_WHEEL_DISTANCE;
 
+   // static const Real CHASSIS_ELEVATION           = 0.005f;                            // to be checked!
+   // static const Real HALF_CHASSIS_LENGTH         = 0.0275f;                             // to be checked!
    static const Real HALF_CHASSIS_WIDTH          = TURTLEBOT4_HALF_WHEEL_DISTANCE - HALF_WHEEL_WIDTH;
 
    static const Real BODY_RADIUS                 = TURTLEBOT4_BASE_RADIUS;
@@ -41,7 +43,7 @@ namespace argos {
    /****************************************/
    /****************************************/
 
-   CQTOpenGLTurtlebot4::CQTOpenGLTurtlebot4() :
+   CQTOpenGLTestBot::CQTOpenGLTestBot() :
       m_unVertices(40)
       // m_fLEDAngleSlice(360.0f / 8.0f) 
       {
@@ -90,14 +92,14 @@ namespace argos {
    /****************************************/
    /****************************************/
 
-   CQTOpenGLTurtlebot4::~CQTOpenGLTurtlebot4() {
+   CQTOpenGLTestBot::~CQTOpenGLTestBot() {
       glDeleteLists(m_unLists, 4);
    }
 
    /****************************************/
    /****************************************/
 
-   void CQTOpenGLTurtlebot4::Draw(CTurtlebot4Entity& c_entity) {
+   void CQTOpenGLTestBot::Draw(CTestBotEntity& c_entity) {
       /* Place the chassis */
       // glCallList(m_unChassisList);
       /* Place the body */
@@ -114,7 +116,7 @@ namespace argos {
       /* Place the LEDs */
       // glPushMatrix();
 
-      // from turtlebot4_entity.h
+      // from testbot_entity.h
 
       // CLEDEquippedEntity& cLEDEquippedEntity = c_entity.GetLEDEquippedEntity();
       // for(UInt32 i = 0; i < 8; i++) {
@@ -132,11 +134,9 @@ namespace argos {
    Real angleStep = cStep.GetValue();
 
    Real radius    = BODY_RADIUS * 0.9f; // slightly inside edge
-   CRadians cOffset = CRadians(ARGOS_PI / 3.0);   // 60 degrees
 
    for(UInt32 i = 0; i < TURTLEBOT4_NUM_COLUMNS; ++i) {
-      CRadians cAngle = cOffset + cStep * i;
-      // CRadians cAngle = cStep * i;
+    CRadians cAngle = cStep * i;
 
     glPushMatrix();
     glTranslated(radius * Cos(cAngle),
@@ -152,7 +152,7 @@ namespace argos {
    /****************************************/
    /****************************************/
 
-   // void CQTOpenGLTurtlebot4::SetGreenPlasticMaterial() {
+   // void CQTOpenGLTestBot::SetGreenPlasticMaterial() {
    //    const GLfloat pfColor[]     = {   0.0f, 1.0f, 0.0f, 1.0f };
    //    const GLfloat pfSpecular[]  = {   0.9f, 0.9f, 0.9f, 1.0f };
    //    const GLfloat pfShininess[] = { 100.0f                   };
@@ -166,7 +166,7 @@ namespace argos {
    /****************************************/
    /****************************************/
 
-   // void CQTOpenGLTurtlebot4::SetRedPlasticMaterial() {
+   // void CQTOpenGLTestBot::SetRedPlasticMaterial() {
    //    const GLfloat pfColor[]     = {   1.0f, 0.0f, 0.0f, 1.0f };
    //    const GLfloat pfSpecular[]  = {   0.9f, 0.9f, 0.9f, 1.0f };
    //    const GLfloat pfShininess[] = { 100.0f                   };
@@ -180,55 +180,21 @@ namespace argos {
    /****************************************/
    /****************************************/
 
-   /****************************************/
-/********** COLOR MATERIALS *************/
-/****************************************/
-
-/* Dark plastic (Create 3 base chassis) */
-void CQTOpenGLTurtlebot4::SetBaseMaterial() {
-    const GLfloat ambient_diffuse[] = {0.15f, 0.15f, 0.15f, 1.0f};  // dark gray
-    const GLfloat specular[]        = {0.05f, 0.05f, 0.05f, 1.0f};
-    const GLfloat shininess[]       = {5.0f};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, ambient_diffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,            specular);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS,           shininess);
-}
-
-/* Matte black (Upper deck) */
-void CQTOpenGLTurtlebot4::SetDeckMaterial() {
-    const GLfloat ambient_diffuse[] = {0.07f, 0.07f, 0.07f, 1.0f};  // matte black
-    const GLfloat specular[]        = {0.02f, 0.02f, 0.02f, 1.0f};
-    const GLfloat shininess[]       = {2.0f};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, ambient_diffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,            specular);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS,           shininess);
-}
-
-/* Aluminum / metal (Columns) */
-void CQTOpenGLTurtlebot4::SetColumnMaterial() {
-    const GLfloat ambient_diffuse[] = {0.75f, 0.75f, 0.75f, 1.0f};  // light silver
-    const GLfloat specular[]        = {0.90f, 0.90f, 0.90f, 1.0f};  // shiny
-    const GLfloat shininess[]       = {50.0f};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, ambient_diffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,            specular);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS,           shininess);
-}
-
-/* Rubber (Wheels) */
-void CQTOpenGLTurtlebot4::SetWheelMaterial() {
-    const GLfloat ambient_diffuse[] = {0.05f, 0.05f, 0.05f, 1.0f};  // dark rubber
-    const GLfloat specular[]        = {0.00f, 0.00f, 0.00f, 1.0f};
-    const GLfloat shininess[]       = {1.0f};
-    glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, ambient_diffuse);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,            specular);
-    glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS,           shininess);
-}
-
+   void CQTOpenGLTestBot::SetCircuitBoardMaterial() {
+      const GLfloat pfColor[]     = { 0.0f, 0.0f, 1.0f, 1.0f };
+      const GLfloat pfSpecular[]  = { 0.5f, 0.5f, 1.0f, 1.0f };
+      const GLfloat pfShininess[] = { 10.0f                  };
+      const GLfloat pfEmission[]  = { 0.0f, 0.0f, 0.0f, 1.0f };
+      glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, pfColor);
+      glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,            pfSpecular);
+      glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS,           pfShininess);
+      glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,            pfEmission);
+   }
 
    /****************************************/
    /****************************************/
 
-   // void CQTOpenGLTurtlebot4::SetLEDMaterial(GLfloat f_red,
+   // void CQTOpenGLTestBot::SetLEDMaterial(GLfloat f_red,
    //                                     GLfloat f_green,
    //                                     GLfloat f_blue) {
    //    const GLfloat pfColor[]     = { f_red, f_green, f_blue, 1.0f };
@@ -244,11 +210,10 @@ void CQTOpenGLTurtlebot4::SetWheelMaterial() {
    /****************************************/
    /****************************************/
 
-   void CQTOpenGLTurtlebot4::RenderWheel() {
+   void CQTOpenGLTestBot::RenderWheel() {
       /* Set material */
       // SetRedPlasticMaterial();
       /* Right side */
-      SetWheelMaterial();
       CVector2 cVertex(WHEEL_RADIUS, 0.0f);
       CRadians cAngle(CRadians::TWO_PI / m_unVertices);
       CVector3 cNormal(-1.0f, -1.0f, 0.0f);
@@ -289,8 +254,7 @@ void CQTOpenGLTurtlebot4::SetWheelMaterial() {
       glEnd();
    }
 
-   void CQTOpenGLTurtlebot4::RenderUpperBody() {
-      SetDeckMaterial();
+   void CQTOpenGLTestBot::RenderUpperBody() {
     Real z = BODY_ELEVATION + LOWER_BODY_HEIGHT + TURTLEBOT4_COLUMN_HEIGHT;
 
     CVector2 cVertex(UPPER_BODY_RADIUS, 0.0f);
@@ -308,8 +272,7 @@ void CQTOpenGLTurtlebot4::SetWheelMaterial() {
 
 
 
-   void CQTOpenGLTurtlebot4::RenderBody() {
-   SetBaseMaterial();
+   void CQTOpenGLTestBot::RenderBody() {
    /* Bottom disk */
    CVector2 cVertex(BODY_RADIUS, 0.0f);
    CRadians cAngle(-CRadians::TWO_PI / m_unVertices);
@@ -350,8 +313,7 @@ void CQTOpenGLTurtlebot4::SetWheelMaterial() {
 }
 
 
-void CQTOpenGLTurtlebot4::RenderColumn() {
-   SetColumnMaterial();
+void CQTOpenGLTestBot::RenderColumn() {
    Real baseZ = BODY_ELEVATION + LOWER_BODY_HEIGHT;
    Real topZ  = baseZ + TURTLEBOT4_COLUMN_HEIGHT;
 
@@ -375,7 +337,7 @@ void CQTOpenGLTurtlebot4::RenderColumn() {
    /****************************************/
    /****************************************/
 
-   // void CQTOpenGLTurtlebot4::RenderChassis() {
+   // void CQTOpenGLTestBot::RenderChassis() {
    //    /* Set material */
    //    SetGreenPlasticMaterial();
    //    /* This part covers the bottom face (parallel to XY) */
@@ -414,7 +376,7 @@ void CQTOpenGLTurtlebot4::RenderColumn() {
    /****************************************/
    /****************************************/
 
-   // void CQTOpenGLTurtlebot4::RenderBody() {
+   // void CQTOpenGLTestBot::RenderBody() {
    //    /* Set material */
    //    // SetGreenPlasticMaterial();
    //    CVector2 cVertex(BODY_RADIUS, 0.0f);
@@ -461,7 +423,7 @@ void CQTOpenGLTurtlebot4::RenderColumn() {
    /****************************************/
    /****************************************/
 
-   // void CQTOpenGLTurtlebot4::RenderLED() {
+   // void CQTOpenGLTestBot::RenderLED() {
    //    /* Side surface */
    //    CVector2 cVertex(BODY_RADIUS, 0.0f);
    //    CRadians cAngle(CRadians::TWO_PI / m_unVertices);
@@ -492,105 +454,30 @@ void CQTOpenGLTurtlebot4::RenderColumn() {
    /****************************************/
    /****************************************/
 
-   class CQTOpenGLOperationDrawTurtlebot4Normal : public CQTOpenGLOperationDrawNormal {
+   class CQTOpenGLOperationDrawTestBotNormal : public CQTOpenGLOperationDrawNormal {
    public:
       void ApplyTo(CQTOpenGLWidget& c_visualization,
-                   CTurtlebot4Entity& c_entity) {
-         static CQTOpenGLTurtlebot4 m_cModel;
+                   CTestBotEntity& c_entity) {
+         static CQTOpenGLTestBot m_cModel;
          c_visualization.DrawRays(c_entity.GetControllableEntity());
          c_visualization.DrawEntity(c_entity.GetEmbodiedEntity());
          m_cModel.Draw(c_entity);
       }
    };
 
-   class CQTOpenGLOperationDrawTurtlebot4Selected : public CQTOpenGLOperationDrawSelected {
+   class CQTOpenGLOperationDrawTestBotSelected : public CQTOpenGLOperationDrawSelected {
    public:
       void ApplyTo(CQTOpenGLWidget& c_visualization,
-                   CTurtlebot4Entity& c_entity) {
+                   CTestBotEntity& c_entity) {
          c_visualization.DrawBoundingBox(c_entity.GetEmbodiedEntity());
       }
    };
 
-   REGISTER_QTOPENGL_ENTITY_OPERATION(CQTOpenGLOperationDrawNormal, CQTOpenGLOperationDrawTurtlebot4Normal, CTurtlebot4Entity);
+   REGISTER_QTOPENGL_ENTITY_OPERATION(CQTOpenGLOperationDrawNormal, CQTOpenGLOperationDrawTestBotNormal, CTestBotEntity);
 
-   REGISTER_QTOPENGL_ENTITY_OPERATION(CQTOpenGLOperationDrawSelected, CQTOpenGLOperationDrawTurtlebot4Selected, CTurtlebot4Entity);
+   REGISTER_QTOPENGL_ENTITY_OPERATION(CQTOpenGLOperationDrawSelected, CQTOpenGLOperationDrawTestBotSelected, CTestBotEntity);
 
    /****************************************/
    /****************************************/
 
 }
-
-// /**
-//  * @file <argos3/plugins/robots/turtlebot3/simulator/qtopengl_turtlebot3.cpp>
-//  *
-//  * @author Carlo Pinciroli - <ilpincy@gmail.com>
-//  */
-
-// #include "qtopengl_turtlebot4.h"
-// #include "turtlebot4_entity.h"
-// // #include "turtlebot3_measures.h"
-// #include <argos3/core/utility/math/vector2.h>
-// #include <argos3/core/simulator/entity/embodied_entity.h>
-// #include <argos3/plugins/simulator/entities/led_equipped_entity.h>
-// #include <argos3/plugins/simulator/visualizations/qt-opengl/qtopengl_widget.h>
-// #include <QImage>
-
-// namespace argos {
-
-//    /****************************************/
-//    /****************************************/
-
-//    CQTOpenGLTurtlebot4::CQTOpenGLTurtlebot4() :
-//       m_cBodyModel("turtlebot4.obj") {
-//    }
-
-//    /****************************************/
-//    /****************************************/
-
-//    CQTOpenGLTurtlebot4::~CQTOpenGLTurtlebot4() {
-//    }
-
-//    /****************************************/
-//    /****************************************/
-
-//    void CQTOpenGLTurtlebot4::Draw(CTurtlebot4Entity& c_entity) {
-//       glEnable(GL_NORMALIZE);
-//       glPushMatrix();
-//       glScalef(0.01f, 0.01f, 0.01f);
-//       m_cBodyModel.Draw();
-//       glPopMatrix();
-//       glDisable(GL_NORMALIZE);
-//    }
-
-//    /****************************************/
-//    /****************************************/
-
-//    class CQTOpenGLOperationDrawTurtlebot3Normal : public CQTOpenGLOperationDrawNormal {
-//    public:
-//       void ApplyTo(CQTOpenGLWidget& c_visualization,
-//                    CTurtlebot4Entity& c_entity) {
-//          static CQTOpenGLTurtlebot4 m_cModel;
-//          c_visualization.DrawRays(c_entity.GetControllableEntity());
-//          c_visualization.DrawEntity(c_entity.GetEmbodiedEntity());
-//          m_cModel.Draw(c_entity);
-//       }
-//    };
-
-//    class CQTOpenGLOperationDrawTurtlebot3Selected : public CQTOpenGLOperationDrawSelected {
-//    public:
-//       void ApplyTo(CQTOpenGLWidget& c_visualization,
-//                    CTurtlebot4Entity& c_entity) {
-//          c_visualization.DrawBoundingBox(c_entity.GetEmbodiedEntity());
-//       }
-//    };
-
-//    REGISTER_QTOPENGL_ENTITY_OPERATION(CQTOpenGLOperationDrawNormal, CQTOpenGLOperationDrawTurtlebot3Normal, CTurtlebot4Entity);
-
-//    REGISTER_QTOPENGL_ENTITY_OPERATION(CQTOpenGLOperationDrawSelected, CQTOpenGLOperationDrawTurtlebot3Selected, CTurtlebot4Entity);
-
-//    /****************************************/
-//    /****************************************/
-
-// }
-
-
