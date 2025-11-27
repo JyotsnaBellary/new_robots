@@ -1,7 +1,11 @@
 # ARGoS3 Turtlebot-4
  - This repository contains code that allows you to simulate the Turtlebot4 in ARGoS3. 
 
-![Turtlebot4](./turtlebot4.gif)
+<!-- ![Turtlebot4](./turtlebot4.gif) -->
+<p align="center">
+  <img src="./turtlebot4.gif" width="300">
+</p>
+
 ## Compilation Instruction 
  - To be able to simulate the turtlebot4 plugin on ARGoS3, make sure you have ARGoS3 installed from [ARGoS3](https://github.com/ilpincy/argos3)
 
