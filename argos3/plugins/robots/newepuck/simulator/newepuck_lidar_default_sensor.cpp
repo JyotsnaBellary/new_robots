@@ -10,7 +10,6 @@
 #include <argos3/plugins/simulator/entities/proximity_sensor_equipped_entity.h>
 
 #include "newepuck_lidar_default_sensor.h"
-// #include "newepuck_measures.h"
 
 #include <cstring>
 

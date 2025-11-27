@@ -115,16 +115,6 @@ namespace argos {
             new CProximitySensorEquippedEntity(this,
                                                "proximity_0");
          AddComponent(*m_pcProximitySensorEquippedEntity);
-         
-	 
-         // Evenly distributess 24 proximity rays on a circle
-         // m_pcProximitySensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-         //    PROXIMITY_SENSOR_RING_RADIUS,
-         //    PROXIMITY_SENSOR_RING_START_ANGLE,
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    8,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
 
          /* Either of these */
          // Manually set the 8 proximity sensors to match the real e-puck robot.
@@ -151,35 +141,6 @@ namespace argos {
             cDir.RotateZ(cAngle);
             m_pcProximitySensorEquippedEntity->AddSensor(cOff, cDir, PROXIMITY_SENSOR_RING_RANGE, m_pcEmbodiedEntity->GetOriginAnchor());
          }
-
-         /* Perspective camera equipped entity */
-         // CQuaternion cPerspCamOrient(CRadians::PI_OVER_TWO, CVector3::Y);
-         // SAnchor& cPerspCamAnchor = m_pcEmbodiedEntity->AddAnchor("perspective_camera",
-         //                                                          CVector3(0.0, 0.0, 0.0),
-         //                                                          cPerspCamOrient);
-         // m_pcPerspectiveCameraEquippedEntity =
-         //    new CPerspectiveCameraEquippedEntity(this,
-         //                                         "perspective_camera_0",
-         //                                         c_perspcam_aperture,
-         //                                         f_perspcam_focal_length,
-         //                                         f_perspcam_range,
-         //                                         640, 480,
-         //                                         cPerspCamAnchor);
-         // AddComponent(*m_pcPerspectiveCameraEquippedEntity);
-	 
-         /* Light sensor equipped entity */
-         // For all around the robot
-         // m_pcLightSensorEquippedEntity =
-         //    new CLightSensorEquippedEntity(this,
-         //                                   "light_0");
-         // AddComponent(*m_pcLightSensorEquippedEntity);
-         // m_pcLightSensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-         //    PROXIMITY_SENSOR_RING_RADIUS,
-         //    PROXIMITY_SENSOR_RING_START_ANGLE,
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    8,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
 
          m_pcLightSensorEquippedEntity =
             new CLightSensorEquippedEntity(this,
@@ -303,14 +264,6 @@ namespace argos {
                                                "proximity");
          AddComponent(*m_pcProximitySensorEquippedEntity);
 
-         // m_pcProximitySensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-         //    PROXIMITY_SENSOR_RING_RADIUS,
-         //    PROXIMITY_SENSOR_RING_START_ANGLE,
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    8,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
-
 	      CRadians sensor_angle[8];
          sensor_angle[0] = CRadians::PI / 10.5884f;
          sensor_angle[1] = CRadians::PI / 3.5999f;
@@ -334,22 +287,7 @@ namespace argos {
             cDir.RotateZ(cAngle);
             m_pcProximitySensorEquippedEntity->AddSensor(cOff, cDir, PROXIMITY_SENSOR_RING_RANGE, m_pcEmbodiedEntity->GetOriginAnchor());
          }
-
-
-	 
-         /* Light sensor equipped entity */
-         // m_pcLightSensorEquippedEntity =
-         //    new CLightSensorEquippedEntity(this,
-         //                                   "light_0");
-         // AddComponent(*m_pcLightSensorEquippedEntity);
-         // m_pcLightSensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-         //    PROXIMITY_SENSOR_RING_RADIUS,
-         //    PROXIMITY_SENSOR_RING_START_ANGLE,
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    8,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
-
+         
          m_pcLightSensorEquippedEntity =
             new CLightSensorEquippedEntity(this,
                                            "light_0");

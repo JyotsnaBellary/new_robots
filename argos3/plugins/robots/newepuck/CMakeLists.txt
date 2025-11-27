@@ -51,26 +51,12 @@ set(ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_SIMULATOR
 set(ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK
   ${ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK}
   ${ARGOS3_HEADERS_PLUGINS_ROBOTS_NEWEPUCK_SIMULATOR}
-  # simulator/qtopengl_newepuck.h
   simulator/qtopengl_newepuck.cpp)
 
 #
 # Create new e-puck plugin
 #
 add_library(argos3plugin_simulator_newepuck SHARED ${ARGOS3_SOURCES_PLUGINS_ROBOTS_NEWEPUCK})
-
-
-
-
-# add_library(argos3plugin_simulator_newepuck SHARED
-#   control_interface/ci_newepuck_proximity_sensor.cpp
-#   control_interface/ci_newepuck_proximity_sensor.h
-#   simulator/dynamics2d_newepuck_model.cpp
-#   simulator/dynamics2d_newepuck_model.h
-#   simulator/newepuck_entity.cpp
-#   simulator/newepuck_entity.h
-#   simulator/qtopengl_newepuck.cpp
-#   simulator/qtopengl_newepuck.h)
 
 target_link_libraries(argos3plugin_simulator_newepuck
     argos3core_simulator

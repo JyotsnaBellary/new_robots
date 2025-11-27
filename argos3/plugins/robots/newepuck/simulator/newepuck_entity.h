@@ -14,9 +14,7 @@ namespace argos {
    class CGroundSensorEquippedEntity;
    class CLEDEquippedEntity;
    class CLightSensorEquippedEntity;
-   // class CPerspectiveCameraEquippedEntity;
    class CProximitySensorEquippedEntity;
-   // class CQuadRotorEntity;
    class CRABEquippedEntity;
    class CBatteryEquippedEntity;
 }
@@ -43,9 +41,7 @@ namespace argos {
                    Real f_rab_range = 0.8f,
                    size_t un_rab_data_size = 2,
                    const std::string& str_bat_model = ""
-                  //  const CRadians& c_perspcam_aperture = ToRadians(CDegrees(30.0f)),
-                  //  Real f_perspcam_focal_length = 0.035,
-                  //  Real f_perspcam_range = 2.0
+                  
                   );
       
       virtual void Init(TConfigurationNode& t_tree);
