@@ -3,7 +3,7 @@
 
 <!-- ![Turtlebot4](./turtlebot4.gif) -->
 <p align="center">
-  <img src="./turtlebot4.gif" width="300">
+  <img src="./turtlebot4.gif" width="500">
 </p>
 
 ## Compilation Instruction 
