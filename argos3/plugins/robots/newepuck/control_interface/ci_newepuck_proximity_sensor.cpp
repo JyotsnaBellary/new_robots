@@ -26,15 +26,6 @@ namespace argos
    CCI_NewEPuckProximitySensor::CCI_NewEPuckProximitySensor() :
       m_tReadings(8)
    {
-      /* for(size_t i = 0; i < 8; ++i)
-      {
-         m_tReadings[i].Angle = START_ANGLE + i * SPACING;
-         m_tReadings[i].Angle.SignedNormalize();
-
-         m_tReadings_Noiseless[i].Angle = m_tReadings[i].Angle;
-         m_tReadings_Noiseless[i].Angle.SignedNormalize();
-      }*/
-
        // Set the values for the proximity sensor angles
        m_tReadings[0].Angle = CRadians::PI / 10.5884f; // front-left sensor
        m_tReadings[1].Angle = CRadians::PI / 3.5999f; // front-left sensor

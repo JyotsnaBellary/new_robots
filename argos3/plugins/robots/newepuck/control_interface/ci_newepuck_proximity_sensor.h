@@ -50,9 +50,6 @@ namespace argos
        * Returns the readings of this sensor
        */
       const TReadings &GetReadings() const;
-      // {
-      //    return m_tReadings;
-      // }
 
 #ifdef ARGOS_WITH_LUA
       virtual void CreateLuaState(lua_State *pt_lua_state);
