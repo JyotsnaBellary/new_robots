@@ -26,7 +26,7 @@
       <sensors>
         <turtlebot4_ground                       implementation="rot_z_only" />
         <turtlebot4_proximity implementation="default" show_rays="true" />
-        <turtlebot4_lidar implementation="default" num_readings="360" show_rays="false" />
+        <turtlebot4_lidar implementation="default" num_readings="360" show_rays="true" />
         <turtlebot4_colored_blob_perspective_camera implementation="default" medium="leds" show_rays="true" />
       </sensors>
       <params velocity="6.0" />
@@ -46,24 +46,24 @@
   <!-- * Arena configuration * -->
   <!-- *********************** -->
     
- <arena size="5, 5, 1" center="0,0,0.5">
+ <arena size="7, 7, 7" center="0,0,0.5">
 
     <floor id="floor"
            source="loop_functions"
            pixels_per_meter="50" />
 
-    <box id="wall_north" size="4,0.1,0.5" movable="false">
-      <body position="0,2,0" orientation="0,0,0" />
+    <!-- <box id="wall_north" size="4,0.1,0.5" movable="false">
+      <body position="0,5,0" orientation="0,0,0" />
     </box>
     <box id="wall_south" size="4,0.1,0.5" movable="false">
-      <body position="0,-2,0" orientation="0,0,0" />
+      <body position="0,-5,0" orientation="0,0,0" />
     </box>
     <box id="wall_east" size="0.1,4,0.5" movable="false">
-      <body position="2,0,0" orientation="0,0,0" />
+      <body position="5,0,0" orientation="0,0,0" />
     </box>
     <box id="wall_west" size="0.1,4,0.5" movable="false">
-      <body position="-2,0,0" orientation="0,0,0" />
-    </box>
+      <body position="-5,0,0" orientation="0,0,0" />
+    </box> -->
 <!--     
         You can distribute entities randomly. Here, we distribute
         10 turtlebot4's in this way:
@@ -75,8 +75,8 @@
     -->
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
-      <orientation method="gaussian" mean="0,0,0" std_dev="90,0,0" />
-      <entity quantity="5" max_trials="100">
+      <orientation method="gaussian" mean="0,180,0" std_dev="120,0,0" />
+      <entity quantity="1" max_trials="100">
         <turtlebot4 id="fb">
           <controller config="fdc" />
           
@@ -88,9 +88,9 @@
         We distribute 5 boxes uniformly in position and rotation around Z.
     -->
     <distribute>
-      <position method="uniform" min="-2,-2,0" max="2,2,0" />
+      <position method="uniform" min="-3,-3,0" max="3,3,0" />
       <orientation method="uniform" min="0,0,0" max="360,0,0" />
-      <entity quantity="3" max_trials="100">
+      <entity quantity="5" max_trials="100">
         <box id="b" size="0.3,0.3,0.5" movable="false" />
       </entity>
     </distribute>
@@ -101,9 +101,9 @@
         matter)
     -->
     <distribute>
-      <position method="uniform" min="-2,-2,0" max="2,2,0" />
-      <orientation method="constant" values="0,0,0" />
-      <entity quantity="3" max_trials="100">
+      <position method="uniform" min="-3,-3,0" max="3,3,0" />
+      <orientation method="constant" values="0,0,0" min="0,0,0" max="360,0,0" />
+      <entity quantity="2" max_trials="100">
         <cylinder id="c" height="0.5" radius="0.15" movable="false" />
       </entity>
     </distribute>

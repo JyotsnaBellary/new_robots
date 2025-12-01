@@ -39,7 +39,7 @@ const Real UPPER_BODY_RADIUS = TURTLEBOT4_BASE_RADIUS * 0.95f;
 // extern const Real TURTLEBOT4_IR_SENSORS_RING_RADIUS;
 // extern const Real TURTLEBOT4_IR_SENSORS_RING_RANGE;
 
-const Real TURTLEBOT4_LIDAR_CENTER_ELEVATION   = -0.01;  // Lidar hight is considered in the robot height
+const Real TURTLEBOT4_LIDAR_CENTER_ELEVATION   = -0.03;  // Lidar hight is considered in the robot height
                                                          // Hence, negative value
 const Real TURTLEBOT4_LIDAR_ELEVATION          = TURTLEBOT4_BASE_TOP + TURTLEBOT4_LIDAR_CENTER_ELEVATION;
 const Real TURTLEBOT4_LIDAR_SENSORS_FAN_RADIUS = TURTLEBOT4_BASE_RADIUS;
