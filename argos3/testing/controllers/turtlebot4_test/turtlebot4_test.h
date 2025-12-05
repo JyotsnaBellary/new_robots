@@ -28,7 +28,8 @@
 #include <argos3/plugins/robots/turtlebot4/control_interface/ci_turtlebot4_proximity_sensor.h>
 #include <argos3/plugins/robots/turtlebot4/control_interface/ci_turtlebot4_base_ground_sensor.h>
 #include <argos3/plugins/robots/turtlebot4/control_interface/ci_turtlebot4_lidar_sensor.h>
-#include <argos3/plugins/robots/turtlebot4/simulator/turtlebot4_colored_blob_perspective_camera_default_sensor.h>
+#include <argos3/plugins/robots/turtlebot4/control_interface/ci_turtlebot4_colored_blob_omnidirectional_camera_sensor.h>
+// #include <argos3/plugins/robots/turtlebot4/simulator/turtlebot4_colored_blob_perspective_camera_default_sensor.h>
 #include <argos3/plugins/robots/generic/control_interface/ci_leds_actuator.h>
 
 /*
@@ -83,6 +84,10 @@ public:
    */
    void LogLightUsingCameraSensorReadings() const;
 
+   /*
+    * Calculates the vector to the closest light.
+    */
+   // virtual CVector2 VectorToLight();
 
    /*
    * This function avoids obstacles using the proximity sensors.
@@ -97,7 +102,7 @@ public:
     * so the function could have been omitted. It's here just for
     * completeness.
     */
-   virtual void Reset() {}
+   virtual void Reset();
 
    /*
     * Called to cleanup what done by Init() when the experiment finishes.
@@ -124,6 +129,8 @@ private:
    /* Pointer to the new turtlebot4 Lidar sensor*/
    CCI_Turtlebot4LIDARSensor* m_pcLidar;
 
+   CCI_LEDsActuator* m_pcLEDs;
+
    /*
     * The following variables are used as parameters for the
     * algorithm. You can set their value in the <parameters> section
@@ -132,7 +139,11 @@ private:
     */
    /* Wheel speed. */
    Real m_fWheelVelocity;
-   CCI_ColoredBlobPerspectiveCameraSensor* m_pcCamera;
+
+   /* Pointer to the omnidirectional camera sensor */
+   CCI_Turtlebot4ColoredBlobOmnidirectionalCameraSensor* m_pcCamera;
+
+   // CCI_ColoredBlobPerspectiveCameraSensor* m_pcCamera;
    // CCI_LEDsActuator* m_pcLedAct;
 
 };

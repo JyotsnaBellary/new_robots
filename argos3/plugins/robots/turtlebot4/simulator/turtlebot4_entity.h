@@ -14,7 +14,8 @@ namespace argos {
    class CGroundSensorEquippedEntity;
    class CLEDEquippedEntity;
    // class CLightSensorEquippedEntity;
-   class CPerspectiveCameraEquippedEntity;
+   // class CPerspectiveCameraEquippedEntity;
+   class COmnidirectionalCameraEquippedEntity;
    class CProximitySensorEquippedEntity;
    // class CQuadRotorEntity;
    // class CRABEquippedEntity;
@@ -43,6 +44,8 @@ namespace argos {
                    Real f_rab_range = 0.8f,
                    size_t un_rab_data_size = 2,
                    const std::string& str_bat_model = "",
+                   const CRadians& c_omnicam_aperture = ToRadians(CDegrees(70.0f)),
+                     bool b_perspcam_front = true,
                    const CRadians& c_perspcam_aperture = ToRadians(CDegrees(33.75f)),
                    Real f_perspcam_focal_length = 0.035f,
                    Real f_perspcam_range = 3.0f
@@ -73,6 +76,10 @@ namespace argos {
       // inline CLightSensorEquippedEntity& GetLightSensorEquippedEntity() {
       //    return *m_pcLightSensorEquippedEntity;
       // }
+
+      inline COmnidirectionalCameraEquippedEntity& GetOmnidirectionalCameraEquippedEntity() {
+         return *m_pcOmnidirectionalCameraEquippedEntity;
+      }
 
       inline CProximitySensorEquippedEntity& GetLidarSensorEquippedEntity() {
          return *m_pcLIDARSensorEquippedEntity;
@@ -119,7 +126,8 @@ namespace argos {
       CWheeledEntity*                        m_pcWheeledEntity;
       // CBatteryEquippedEntity*                m_pcBatteryEquippedEntity;
       // CQuadRotorEntity*                      m_pcQuadRotorEntity;
-      CPerspectiveCameraEquippedEntity*      m_pcPerspectiveCameraEquippedEntity;
+      // CPerspectiveCameraEquippedEntity*      m_pcPerspectiveCameraEquippedEntity;
+      COmnidirectionalCameraEquippedEntity*  m_pcOmnidirectionalCameraEquippedEntity;
    };
 
 }

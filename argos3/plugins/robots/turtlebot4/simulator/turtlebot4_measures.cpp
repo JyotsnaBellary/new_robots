@@ -58,6 +58,7 @@ const Real TURTLEBOT4_IR_SENSOR_RING_ELEVATION       = 0.06f; // is this correct
 const Real TURTLEBOT4_IR_SENSOR_RING_RADIUS          = TURTLEBOT4_BASE_RADIUS;
 const CRadians TURTLEBOT4_IR_SENSOR_RING_START_ANGLE = CRadians((2 * ARGOS_PI / 8.0f) * 0.5f);
 const Real TURTLEBOT4_IR_SENSOR_RING_RANGE           = 0.1f;
+const Real OMNIDIRECTIONAL_CAMERA_ELEVATION = 0.288699733f;
 
 // Readings from here:
 // https://emanual.robotis.com/docs/en/platform/turtlebot4/appendix_lds_01/

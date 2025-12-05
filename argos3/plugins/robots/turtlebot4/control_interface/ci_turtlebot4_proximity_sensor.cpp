@@ -24,30 +24,20 @@ namespace argos
    /****************************************/
 
    CCI_Turtlebot4ProximitySensor::CCI_Turtlebot4ProximitySensor() :
-      m_tReadings(8)
+      m_tReadings(7)
    {
-      /* for(size_t i = 0; i < 8; ++i)
-      {
-         m_tReadings[i].Angle = START_ANGLE + i * SPACING;
-         m_tReadings[i].Angle.SignedNormalize();
-
-         m_tReadings_Noiseless[i].Angle = m_tReadings[i].Angle;
-         m_tReadings_Noiseless[i].Angle.SignedNormalize();
-      }*/
 
        // Set the values for the proximity sensor angles
-       m_tReadings[0].Angle = CRadians::PI / 10.5884f; // front-left sensor
-       m_tReadings[1].Angle = CRadians::PI / 3.5999f; // front-left sensor
-       m_tReadings[2].Angle = CRadians::PI_OVER_TWO; //side sensor
-       m_tReadings[3].Angle = CRadians::PI / 1.2f;   // back sensor
-       m_tReadings[4].Angle = CRadians::PI / 0.8571f; // back sensor
-       m_tReadings[5].Angle = CRadians::PI / 0.6667f; //side sensor
-       m_tReadings[6].Angle = CRadians::PI / 0.5806f; // front-right sensor
-       m_tReadings[7].Angle = CRadians::PI / 0.5247f; // front-right sensor
+       m_tReadings[0].Angle = -CRadians::PI / 2.75f;
+       m_tReadings[1].Angle = -CRadians::PI / 4.736f;
+       m_tReadings[2].Angle = -CRadians::PI / 9.0f;
+       m_tReadings[3].Angle = -CRadians::PI / 60.0f;
+       m_tReadings[4].Angle =  CRadians::PI / 12.630f;
+       m_tReadings[5].Angle =  CRadians::PI / 5.294f;
+       m_tReadings[6].Angle =  CRadians::PI / 2.7565f;
 
-       for(size_t i = 0; i < 8; ++i)
-       {
-          m_tReadings[i].Angle.SignedNormalize();
+       for(size_t i = 0; i < 7; ++i) {
+           m_tReadings[i].Angle.SignedNormalize();
        }
 
    }

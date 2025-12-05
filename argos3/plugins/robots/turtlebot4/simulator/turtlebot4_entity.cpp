@@ -14,37 +14,12 @@
 #include <argos3/plugins/simulator/entities/ground_sensor_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/led_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/light_sensor_equipped_entity.h>
+#include <argos3/plugins/simulator/entities/omnidirectional_camera_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/proximity_sensor_equipped_entity.h>
 #include <argos3/plugins/simulator/entities/battery_equipped_entity.h>
 
 namespace argos {
 
-   /****************************************/
-   /****************************************/
-
-   // static const Real BODY_RADIUS                = 0.338F;
-   // static const Real BODY_HEIGHT                = 0.351f;
-
-   // static const Real INTERWHEEL_DISTANCE        = 0.235;
-   // static const Real HALF_INTERWHEEL_DISTANCE   = INTERWHEEL_DISTANCE * 0.5f;
-   // static const Real WHEEL_RADIUS               = 0.036;
-
-   // static const Real PROXIMITY_SENSOR_RING_ELEVATION       = 0.06f;
-   // static const Real PROXIMITY_SENSOR_RING_RADIUS          = BODY_RADIUS;
-   // static const CRadians PROXIMITY_SENSOR_RING_START_ANGLE = CRadians((2 * ARGOS_PI / 8.0f) * 0.5f);
-   // static const Real PROXIMITY_SENSOR_RING_RANGE           = 0.1f;
-
-   // static const CRadians LED_RING_START_ANGLE   = CRadians((ARGOS_PI / 8.0f) * 0.5f);
-   // static const Real LED_RING_RADIUS            = BODY_RADIUS + 0.007;
-   // static const Real LED_RING_ELEVATION         = 0.086f;
-   // static const Real RAB_ELEVATION              = LED_RING_ELEVATION;
-
-   /* Choose your radius (distance from center) and elevation */
-   // const Real LIGHT_RING_RADIUS = 0.08f; // tweak as needed
-   // const Real LIGHT_RING_Z      = PROXIMITY_SENSOR_RING_ELEVATION; // or a fixed value, e.g., 0.02f
-
-   /****************************************/
-   /****************************************/
 
    CTurtlebot4Entity::CTurtlebot4Entity() :
       CComposableEntity(nullptr),
@@ -52,13 +27,10 @@ namespace argos {
       m_pcEmbodiedEntity(nullptr),
       m_pcGroundSensorEquippedEntity(nullptr),
       m_pcLEDEquippedEntity(nullptr),
-      // m_pcLightSensorEquippedEntity(nullptr),
       m_pcProximitySensorEquippedEntity(nullptr),
-      // m_pcRABEquippedEntity(nullptr),
       m_pcWheeledEntity(nullptr),
-      m_pcPerspectiveCameraEquippedEntity(NULL)
-
-      // m_pcBatteryEquippedEntity(nullptr)
+      m_pcOmnidirectionalCameraEquippedEntity(nullptr)
+      // m_pcPerspectiveCameraEquippedEntity(NULL)
       {
    }
 
@@ -72,6 +44,8 @@ namespace argos {
                               Real f_rab_range,
                               size_t un_rab_data_size,
                               const std::string& str_bat_model,
+                              const CRadians& c_omnicam_aperture,
+                                  bool b_perspcam_front,
                               const CRadians& c_perspcam_aperture,
                               Real f_perspcam_focal_length,
                               Real f_perspcam_range) :
@@ -81,12 +55,10 @@ namespace argos {
       m_pcEmbodiedEntity(nullptr),
       m_pcGroundSensorEquippedEntity(nullptr),
       m_pcLEDEquippedEntity(nullptr),
-      // m_pcLightSensorEquippedEntity(nullptr),
       m_pcProximitySensorEquippedEntity(nullptr),
-      // m_pcRABEquippedEntity(nullptr),
       m_pcWheeledEntity(nullptr),
-      m_pcPerspectiveCameraEquippedEntity(nullptr)
-      // m_pcBatteryEquippedEntity(nullptr)
+      m_pcOmnidirectionalCameraEquippedEntity(nullptr)
+      // m_pcPerspectiveCameraEquippedEntity(nullptr)
        {
       try {
          /*
@@ -122,16 +94,6 @@ namespace argos {
             new CProximitySensorEquippedEntity(this,
                                                "proximity");
          AddComponent(*m_pcProximitySensorEquippedEntity);
-         
-	 
-         // Evenly distributess 24 proximity rays on a circle
-         // m_pcProximitySensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-         //    PROXIMITY_SENSOR_RING_RADIUS,
-         //    PROXIMITY_SENSOR_RING_START_ANGLE,
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    8,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
 
          CRadians sensor_angle[7] = {
     -CRadians::PI / 2.75f,             // -65,3°
@@ -142,39 +104,6 @@ namespace argos {
     CRadians::PI / 5.294f,              // +60°
     CRadians::PI / 2.7565f             // +90° (rightmost)            // slight extra left bias if needed
          };
-
-         // const UInt32 SENSOR_COUNT = 7;
-         // CRadians start_angle = -CRadians::PI_OVER_TWO;  // leftmost (-90°)
-         // CRadians step_angle  = CRadians::PI / 6.0;      // 30° increment
-
-         // CVector3 c_center = CVector3(0.0f, 0.0f, TURTLEBOT4_IR_SENSOR_RING_ELEVATION);
-
-         // for(UInt32 i = 0; i < SENSOR_COUNT; ++i) {
-         //    CRadians cAngle = start_angle + step_angle * i;
-         //    CVector3 cOff(TURTLEBOT4_IR_SENSOR_RING_RADIUS, 0.0f, 0.0f);
-         //    cOff.RotateZ(cAngle);
-         //    cOff += c_center;
-
-         //    CVector3 cDir(TURTLEBOT4_IR_SENSOR_RING_RANGE, 0.0f, 0.0f);
-         //    cDir.RotateZ(cAngle);
-
-         //    m_pcProximitySensorEquippedEntity->AddSensor(
-         //       cOff,
-         //       cDir,
-         //       TURTLEBOT4_IR_SENSOR_RING_RANGE,
-         //       m_pcEmbodiedEntity->GetOriginAnchor());
-         // }
-         /* Either of these */
-         // Manually set the 8 proximity sensors to match the real turtlebot4 robot.
-         // CRadians sensor_angle[8];
-         // sensor_angle[0] = CRadians::PI / 10.5884f;
-         // sensor_angle[1] = CRadians::PI / 3.5999f;
-         // sensor_angle[2] = CRadians::PI_OVER_TWO; //side sensor
-         // sensor_angle[3] = CRadians::PI / 1.2f;   // back sensor
-         // sensor_angle[4] = CRadians::PI / 0.8571f; // back sensor
-         // sensor_angle[5] = CRadians::PI / 0.6667f; //side sensor
-         // sensor_angle[6] = CRadians::PI / 0.5806f;
-         // sensor_angle[7] = CRadians::PI / 0.5247f;
 
          CRadians cAngle;
          CVector3 cOff, cDir, c_center = CVector3(0.0f, 0.0f, TURTLEBOT4_IR_SENSOR_RING_ELEVATION);
@@ -190,46 +119,30 @@ namespace argos {
             m_pcProximitySensorEquippedEntity->AddSensor(cOff, cDir, TURTLEBOT4_IR_SENSOR_RING_RANGE, m_pcEmbodiedEntity->GetOriginAnchor());
          }
 
+         /* Omnidirectional camera equipped entity */
+         m_pcOmnidirectionalCameraEquippedEntity =
+            new COmnidirectionalCameraEquippedEntity(this,
+                                                     "omnidirectional_camera_0",
+                                                     c_omnicam_aperture,
+                                                     CVector3(0.0f,
+                                                              0.0f,
+                                                              OMNIDIRECTIONAL_CAMERA_ELEVATION));
+         AddComponent(*m_pcOmnidirectionalCameraEquippedEntity);
+         
          /* Perspective camera equipped entity */
-         CQuaternion cPerspCamOrient(CRadians::PI_OVER_TWO, CVector3::Y);
-         SAnchor& cPerspCamAnchor = m_pcEmbodiedEntity->AddAnchor("perspective_camera",
-                                                                  CVector3(0.0, 0.0, 0.0),
-                                                                  cPerspCamOrient);
-         m_pcPerspectiveCameraEquippedEntity =
-            new CPerspectiveCameraEquippedEntity(this,
-                                                 "perspective_camera_0",
-                                                 c_perspcam_aperture,
-                                                 f_perspcam_focal_length,
-                                                 f_perspcam_range,
-                                                 640, 480,
-                                                 cPerspCamAnchor);
-         AddComponent(*m_pcPerspectiveCameraEquippedEntity);
-	 
-         /* Light sensor equipped entity */
-         // For all around the robot
-         // m_pcLightSensorEquippedEntity =
-         //    new CLightSensorEquippedEntity(this,
-         //                                   "light_0");
-         // AddComponent(*m_pcLightSensorEquippedEntity);
-         // m_pcLightSensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-         //    PROXIMITY_SENSOR_RING_RADIUS,
-         //    PROXIMITY_SENSOR_RING_START_ANGLE,
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    8,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
-
-         // m_pcLightSensorEquippedEntity =
-         //    new CLightSensorEquippedEntity(this,
-         //                                   "light_0");
-         // AddComponent(*m_pcLightSensorEquippedEntity);
-         // m_pcLightSensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, LIGHT_RING_Z),
-         //    LIGHT_RING_RADIUS,
-         //    CRadians::PI_OVER_FOUR, // 45 degrees 
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    4,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
+         // CQuaternion cPerspCamOrient(CRadians::PI_OVER_TWO, CVector3::Y);
+         // SAnchor& cPerspCamAnchor = m_pcEmbodiedEntity->AddAnchor("perspective_camera",
+         //                                                          CVector3(0.0, 0.0, 0.0),
+                                                                  // cPerspCamOrient);
+         // m_pcPerspectiveCameraEquippedEntity =
+         //    new CPerspectiveCameraEquippedEntity(this,
+         //                                         "perspective_camera_0",
+         //                                         c_perspcam_aperture,
+         //                                         f_perspcam_focal_length,
+         //                                         f_perspcam_range,
+         //                                         640, 480,
+         //                                         cPerspCamAnchor);
+         // AddComponent(*m_pcPerspectiveCameraEquippedEntity);
 
          /* Ground sensor equipped entity */
          m_pcGroundSensorEquippedEntity =
@@ -247,48 +160,13 @@ namespace argos {
          m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.0879, -0.109),
             CGroundSensorEquippedEntity::TYPE_GRAYSCALE,
             m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.08, 0.0),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.042, 0.065),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.0, 0.08),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(-0.042, 0.065),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(-0.08, 0.0),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(-0.042, -0.065),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.0, -0.08),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.042, -0.065),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         /* RAB equipped entity */
-         // m_pcRABEquippedEntity = new CRABEquippedEntity(this,
-                                                      //   "rab_0",
-                                                      //   un_rab_data_size,
-                                                      //   f_rab_range,
-                                                      //   m_pcEmbodiedEntity->GetOriginAnchor(),
-                                                      //   *m_pcEmbodiedEntity,
-                                                      //   CVector3(0.0f, 0.0f, RAB_ELEVATION));
-         // AddComponent(*m_pcRABEquippedEntity);
-         /* Battery equipped entity */
-         // m_pcBatteryEquippedEntity = new CBatteryEquippedEntity(this, "battery_0", str_bat_model);
-         // AddComponent(*m_pcBatteryEquippedEntity);
 
          /* Controllable entity
             It must be the last one, for actuators/sensors to link to composing entities correctly */
          m_pcControllableEntity = new CControllableEntity(this, "controller_0");
          AddComponent(*m_pcControllableEntity);
          m_pcControllableEntity->SetController(str_controller_id);
+
          /* Update components */
          UpdateComponents();
       }
@@ -341,13 +219,6 @@ namespace argos {
                                                "proximity");
          AddComponent(*m_pcProximitySensorEquippedEntity);
 
-         // m_pcProximitySensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-         //    PROXIMITY_SENSOR_RING_RADIUS,
-         //    PROXIMITY_SENSOR_RING_START_ANGLE,
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    8,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
 
 	      CRadians sensor_angle[7] = {
     -CRadians::PI / 2.75f,             // -65,3°
@@ -372,50 +243,17 @@ namespace argos {
             m_pcProximitySensorEquippedEntity->AddSensor(cOff, cDir, TURTLEBOT4_IR_SENSOR_RING_RANGE, m_pcEmbodiedEntity->GetOriginAnchor());
          }
 
-
-         /* Perspective camera equipped entity */
-         Real f_perspcam_focal_length = 0.035;
-         Real f_perspcam_range = 3.0;
-         // CDegrees c_perspcam_aperture(33.75f);
-         CRadians c_perspcam_aperture = ToRadians(CDegrees(33.75f));
-         CQuaternion cPerspCamOrient(CRadians::PI_OVER_TWO, CVector3::Y);
-         SAnchor& cPerspCamAnchor = m_pcEmbodiedEntity->AddAnchor("perspective_camera",
-                                                                  CVector3(0.0, 0.0, 0.0),
-                                                                  cPerspCamOrient);
-         m_pcPerspectiveCameraEquippedEntity =
-            new CPerspectiveCameraEquippedEntity(this,
-                                                 "perspective_camera_0",
-                                                 c_perspcam_aperture,
-                                                 f_perspcam_focal_length,
-                                                 f_perspcam_range,
-                                                 640, 480,
-                                                 cPerspCamAnchor);
-         AddComponent(*m_pcPerspectiveCameraEquippedEntity);
-	 
-         /* Light sensor equipped entity */
-         // m_pcLightSensorEquippedEntity =
-         //    new CLightSensorEquippedEntity(this,
-         //                                   "light_0");
-         // AddComponent(*m_pcLightSensorEquippedEntity);
-         // m_pcLightSensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, PROXIMITY_SENSOR_RING_ELEVATION),
-         //    PROXIMITY_SENSOR_RING_RADIUS,
-         //    PROXIMITY_SENSOR_RING_START_ANGLE,
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    8,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
-
-         // m_pcLightSensorEquippedEntity =
-         //    new CLightSensorEquippedEntity(this,
-         //                                   "light_0");
-         // AddComponent(*m_pcLightSensorEquippedEntity);
-         // m_pcLightSensorEquippedEntity->AddSensorRing(
-         //    CVector3(0.0f, 0.0f, LIGHT_RING_Z),
-         //    LIGHT_RING_RADIUS,
-         //    CRadians::PI_OVER_FOUR, // 45 degrees 
-         //    PROXIMITY_SENSOR_RING_RANGE,
-         //    4,
-         //    m_pcEmbodiedEntity->GetOriginAnchor());
+         /* Omnidirectional camera equipped entity */
+         CDegrees cAperture(70.0f);
+         GetNodeAttributeOrDefault(t_tree, "omnidirectional_camera_aperture", cAperture, cAperture);
+         m_pcOmnidirectionalCameraEquippedEntity =
+            new COmnidirectionalCameraEquippedEntity(this,
+                                                     "omnidirectional_camera_0",
+                                                     ToRadians(cAperture),
+                                                     CVector3(0.0f,
+                                                              0.0f,
+                                                              OMNIDIRECTIONAL_CAMERA_ELEVATION));
+         AddComponent(*m_pcOmnidirectionalCameraEquippedEntity);
 
          /* Ground sensor equipped entity */
          m_pcGroundSensorEquippedEntity =
@@ -433,49 +271,7 @@ namespace argos {
          m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.0879, -0.109),
             CGroundSensorEquippedEntity::TYPE_GRAYSCALE,
             m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.08, 0.0),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.042, 0.065),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.0, 0.08),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(-0.042, 0.065),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(-0.08, 0.0),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(-0.042, -0.065),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.0, -0.08),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         // m_pcGroundSensorEquippedEntity->AddSensor(CVector2(0.042, -0.065),
-         //                                           CGroundSensorEquippedEntity::TYPE_BLACK_WHITE,
-         //                                           m_pcEmbodiedEntity->GetOriginAnchor());
-         /* RAB equipped entity */
-         // Real fRange = 0.8f;
-         // GetNodeAttributeOrDefault(t_tree, "rab_range", fRange, fRange);
-         // UInt32 unDataSize = 2;
-         // GetNodeAttributeOrDefault(t_tree, "rab_data_size", unDataSize, unDataSize);
-         // m_pcRABEquippedEntity = new CRABEquippedEntity(this,
-                                                      //   "rab_0",
-                                                      //   unDataSize,
-                                                      //   fRange,
-                                                      //   m_pcEmbodiedEntity->GetOriginAnchor(),
-                                                      //   *m_pcEmbodiedEntity,
-                                                      //   CVector3(0.0f, 0.0f, RAB_ELEVATION));
-         // AddComponent(*m_pcRABEquippedEntity);
          
-         /* Battery equipped entity */
-         // m_pcBatteryEquippedEntity = new CBatteryEquippedEntity(this, "battery_0");
-         // if(NodeExists(t_tree, "battery"))
-         //    m_pcBatteryEquippedEntity->Init(GetNode(t_tree, "battery"));
-         // AddComponent(*m_pcBatteryEquippedEntity);
          /* Controllable entity
             It must be the last one, for actuators/sensors to link to composing entities correctly */
          m_pcControllableEntity = new CControllableEntity(this);
@@ -512,13 +308,9 @@ namespace argos {
 #define UPDATE(COMPONENT) if(COMPONENT->IsEnabled()) COMPONENT->Update();
 
    void CTurtlebot4Entity::UpdateComponents() {
-      // UPDATE(m_pcRABEquippedEntity);
       UPDATE(m_pcLEDEquippedEntity);
-      // UPDATE(m_pcBatteryEquippedEntity);
-      // UPDATE(m_pcLightSensorEquippedEntity);
       UPDATE(m_pcGroundSensorEquippedEntity);
-      // UPDATE(m_pcProximitySensorEquippedEntity);
-      UPDATE(m_pcPerspectiveCameraEquippedEntity)
+      // UPDATE(m_pcPerspectiveCameraEquippedEntity)
    }
 
    /****************************************/
@@ -526,7 +318,7 @@ namespace argos {
    
    REGISTER_ENTITY(CTurtlebot4Entity,
                    "turtlebot4",
-                   "Carlo Pinciroli [ilpincy@gmail.com]",
+                   "Jyotsna Bellary [jyotsnabellary@gmail.com]",
                    "1.0",
                    "The turtlebot4 robot.",
                    "The turtlebot4 is a open-hardware, extensible robot intended for education. In its\n"

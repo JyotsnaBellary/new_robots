@@ -25,9 +25,11 @@
       </actuators>
       <sensors>
         <turtlebot4_ground                       implementation="rot_z_only" />
-        <turtlebot4_proximity implementation="default" show_rays="true" />
-        <turtlebot4_lidar implementation="default" num_readings="360" show_rays="true" />
-        <turtlebot4_colored_blob_perspective_camera implementation="default" medium="leds" show_rays="true" />
+        <turtlebot4_proximity implementation="default" show_rays="false" />
+        <turtlebot4_lidar implementation="default" num_readings="360" show_rays="false" />
+        <!-- <turtlebot4_colored_blob_perspective_camera implementation="default" medium="leds" show_rays="true" /> -->
+        <turtlebot4_colored_blob_omnidirectional_camera implementation="rot_z_only" medium="leds" show_rays="true" />
+
       </sensors>
       <params velocity="6.0" />
     </turtlebot4_test_controller>
@@ -52,18 +54,20 @@
            source="loop_functions"
            pixels_per_meter="50" />
 
-    <!-- <box id="wall_north" size="4,0.1,0.5" movable="false">
-      <body position="0,5,0" orientation="0,0,0" />
-    </box>
-    <box id="wall_south" size="4,0.1,0.5" movable="false">
-      <body position="0,-5,0" orientation="0,0,0" />
-    </box>
-    <box id="wall_east" size="0.1,4,0.5" movable="false">
-      <body position="5,0,0" orientation="0,0,0" />
-    </box>
-    <box id="wall_west" size="0.1,4,0.5" movable="false">
-      <body position="-5,0,0" orientation="0,0,0" />
-    </box> -->
+    <light id="light1"
+           position="0,0,0.5"
+           orientation="0,0,0"
+           color="yellow"
+           intensity="3.0"
+           medium="leds" />
+
+    <light id="light2"
+           position="0,2,0.5"
+           orientation="0,0,0"
+           color="red"
+           intensity="3.0"
+           medium="leds" />
+    
 <!--     
         You can distribute entities randomly. Here, we distribute
         10 turtlebot4's in this way:
@@ -76,7 +80,7 @@
     <distribute>
       <position method="uniform" min="-2,-2,0" max="2,2,0" />
       <orientation method="gaussian" mean="0,180,0" std_dev="120,0,0" />
-      <entity quantity="1" max_trials="100">
+      <entity quantity="5" max_trials="100">
         <turtlebot4 id="fb">
           <controller config="fdc" />
           

@@ -32,25 +32,11 @@ namespace argos {
 
    protected:
 
-      /** Sets a green plastic material */
-      // void SetGreenPlasticMaterial();
-      /** Sets a red plastic material */
-      // void SetRedPlasticMaterial();
-      /** Sets a circuit board material */
-      void SetCircuitBoardMaterial();
-      /** Sets a colored LED material */
-      // void SetLEDMaterial(GLfloat f_red,
-      //                     GLfloat f_green,
-      //                     GLfloat f_blue);
-
       /** Renders a wheel */
       void RenderWheel();
-      /** Renders the chassis */
-      // void RenderChassis();
+
       /** Renders the body */
       void RenderBody();
-      /** A single LED of the ring */
-      // void RenderLED();
 
       /** Renders the upperbody */
       void RenderUpperBody();
@@ -66,10 +52,14 @@ namespace argos {
 
       /** Set Column Material */ 
       void SetColumnMaterial();
-      
+
       /** Set Wheel Material */
       void SetWheelMaterial(); 
 
+      /** Renders the camera */
+      void RenderCamera();
+
+      void SetWhitePlasticMaterial();
    private:
 
       /** Start of the display list index */
@@ -77,9 +67,6 @@ namespace argos {
 
       /** Turtlebot4 wheel */
       GLuint m_unWheelList;
-
-      /** Chassis display list */
-      // GLuint m_unChassisList;
 
       /** Body display list */
       GLuint m_unBodyList;
@@ -90,16 +77,11 @@ namespace argos {
       /** Column list */
       GLuint m_unColumnList;
 
-      // /** LED display list */
-      // GLuint m_unLEDList;
-
-      // /** Number of vertices to display the round parts
-      //     (wheels, chassis, etc.) */
+      /** Number of vertices to display the round parts */
       GLuint m_unVertices;
 
-      // /* Angle gap between two leds */
-      // GLfloat m_fLEDAngleSlice;
-
+      /** Foot-bot camera module */
+      GLuint m_unCameraList;
    };
 
 }

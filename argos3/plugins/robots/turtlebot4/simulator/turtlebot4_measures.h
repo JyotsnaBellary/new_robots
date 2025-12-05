@@ -55,4 +55,6 @@ extern const CRange<Real> TURTLEBOT4_LIDAR_SENSORS_RING_RANGE;
 
 extern const Real TURTLEBOT4_MAX_FORCE;
 extern const Real TURTLEBOT4_MAX_TORQUE;
+extern const Real OMNIDIRECTIONAL_CAMERA_ELEVATION;
+
 #endif

@@ -7,6 +7,7 @@ set(ARGOS3_HEADERS_PLUGINS_ROBOTS_TURTLEBOT4_CONTROLINTERFACE
   control_interface/ci_turtlebot4_base_ground_sensor.h
   control_interface/ci_turtlebot4_lidar_sensor.h
   control_interface/ci_turtlebot4_proximity_sensor.h
+  control_interface/ci_turtlebot4_colored_blob_omnidirectional_camera_sensor.h
 )
 set(ARGOS3_HEADERS_PLUGINS_ROBOTS_TURTLEBOT4_SIMULATOR
     simulator/dynamics2d_turtlebot4_model.h
@@ -14,7 +15,7 @@ set(ARGOS3_HEADERS_PLUGINS_ROBOTS_TURTLEBOT4_SIMULATOR
     simulator/turtlebot4_base_ground_rotzonly_sensor.h
     simulator/turtlebot4_lidar_default_sensor.h
     simulator/turtlebot4_proximity_default_sensor.h
-    simulator/turtlebot4_colored_blob_perspective_camera_default_sensor.h
+    simulator/turtlebot4_colored_blob_omnidirectional_camera_rotzonly_sensor.h
     simulator/turtlebot4_entity.h
     simulator/turtlebot4_measures.h
 
@@ -28,6 +29,7 @@ set(ARGOS3_SOURCES_PLUGINS_ROBOTS_TURTLEBOT4
   control_interface/ci_turtlebot4_base_ground_sensor.cpp
   control_interface/ci_turtlebot4_lidar_sensor.cpp
   control_interface/ci_turtlebot4_proximity_sensor.cpp
+  control_interface/ci_turtlebot4_colored_blob_omnidirectional_camera_sensor.cpp
 )
 
 set(ARGOS3_SOURCES_PLUGINS_ROBOTS_TURTLEBOT4
@@ -38,9 +40,9 @@ set(ARGOS3_SOURCES_PLUGINS_ROBOTS_TURTLEBOT4
   simulator/turtlebot4_base_ground_rotzonly_sensor.cpp
   simulator/turtlebot4_lidar_default_sensor.cpp
   simulator/turtlebot4_proximity_default_sensor.cpp
-  simulator/turtlebot4_colored_blob_perspective_camera_default_sensor.cpp
+  simulator/turtlebot4_colored_blob_omnidirectional_camera_rotzonly_sensor.cpp
   simulator/turtlebot4_entity.cpp
-    simulator/turtlebot4_measures.cpp
+  simulator/turtlebot4_measures.cpp
 )
 
 #
@@ -60,19 +62,6 @@ set(ARGOS3_SOURCES_PLUGINS_ROBOTS_TURTLEBOT4
 # Create Turtlebot4 plugin
 #
 add_library(argos3plugin_simulator_turtlebot4 SHARED ${ARGOS3_SOURCES_PLUGINS_ROBOTS_TURTLEBOT4})
-
-
-
-
-# add_library(argos3plugin_simulator_turtlebot4 SHARED
-#   control_interface/ci_turtlebot4_proximity_sensor.cpp
-#   control_interface/ci_turtlebot4_proximity_sensor.h
-#   simulator/dynamics2d_turtlebot4_model.cpp
-#   simulator/dynamics2d_turtlebot4_model.h
-#   simulator/turtlebot4_entity.cpp
-#   simulator/turtlebot4_entity.h
-#   simulator/qtopengl_turtlebot4.cpp
-#   simulator/qtopengl_turtlebot4.h)
 
 target_link_libraries(argos3plugin_simulator_turtlebot4
     argos3core_simulator
