@@ -53,7 +53,8 @@ argos3 -c argos3/testing/experiments/turtlebot4_test.argos
 ```
 
 ## Building Your Own Robot Plugin
-See `docs/ADDING_NEW_ROBOT.md` for the detailed walkthrough that covers copying a template robot, wiring CMake, adding controllers/experiments, and validating the plugin inside ARGoS3.
+See `docs/ADDING_NEW_ROBOT.md` for the detailed walkthrough that covers copying a template robot, wiring CMake, adding controllers/experiments, and validating the plugin inside ARGoS3. 
+Follow `docs/NEWEPUCK_TEMPLATE.md`, which also shows how to add install rules so the plugin lands under your ARGoS prefix.
 
 ## Possible Future Work
 - Port these controllers to a physical Turtlebot4.

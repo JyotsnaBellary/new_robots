@@ -21,7 +21,6 @@ namespace argos {
 
    /****************************************/
    /****************************************/
-   // should this be emodied entity or static?
    CTurtlebot4BaseGroundRotZOnlySensor::CTurtlebot4BaseGroundRotZOnlySensor() :
       m_pcEmbodiedEntity(nullptr),
       m_pcFloorEntity(nullptr),

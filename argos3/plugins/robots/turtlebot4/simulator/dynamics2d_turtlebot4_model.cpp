@@ -11,25 +11,6 @@
 
 namespace argos {
 
-   /****************************************/
-   /****************************************/
-
-   // static const Real TURTLEBOT4_MASS                = 0.4f;
-
-   // // static const Real TURTLEBOT4_RADIUS              = 0.035f;
-   // static const Real TURTLEBOT4_BASE_RADIUS              = 0.169; // or 162?
-
-   // static const Real TURTLEBOT4_WHEEL_DISTANCE = 0.235; // from create3 
-   // static const Real TURTLEBOT4_WHEEL_RADIUS        = 0.036; 
-   // const Real TURTLEBOT3_BASE_ELEVATION = 0.045;
-   // static const Real TURTLEBOT4_BASE_HEIGHT    = 0.351f;
-
-   // static const Real TURTLEBOT4_BASE_TOP       = TURTLEBOT3_BASE_ELEVATION + TURTLEBOT4_BASE_HEIGHT;
-
-
-   // static const Real TURTLEBOT4_MAX_FORCE           = 1.5f; // Need it
-   // static const Real TURTLEBOT4_MAX_TORQUE          = 1.5f; // Need it
-
    enum TURTLEBOT4_WHEELS {
       TURTLEBOT4_LEFT_WHEEL = 0,
       TURTLEBOT4_RIGHT_WHEEL = 1
