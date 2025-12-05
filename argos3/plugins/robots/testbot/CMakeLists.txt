@@ -5,19 +5,12 @@
 #
 set(ARGOS3_HEADERS_PLUGINS_ROBOTS_TESTBOT_CONTROLINTERFACE
   # control_interface/ci_testbot_proximity_sensor.h
-  # control_interface/ci_testbot_base_ground_sensor.h
-  # control_interface/ci_testbot_lidar_sensor.h
-  # control_interface/ci_testbot_light_sensor.h
   )
 
 set(ARGOS3_HEADERS_PLUGINS_ROBOTS_TESTBOT_SIMULATOR
     simulator/dynamics2d_testbot_model.h
-    # simulator/dynamics3d_testbot_model.h
-    # simulator/testbot_base_ground_rotzonly_sensor.h
-    # simulator/testbot_light_rotzonly_sensor.h
-    # simulator/testbot_lidar_default_sensor.h
-    # simulator/testbot_proximity_default_sensor.h
     simulator/testbot_entity.h
+    # simulator/testbot_proximity_default_sensor.h
     )
     
 #
@@ -26,19 +19,12 @@ set(ARGOS3_HEADERS_PLUGINS_ROBOTS_TESTBOT_SIMULATOR
 set(ARGOS3_SOURCES_PLUGINS_ROBOTS_TESTBOT
   ${ARGOS3_HEADERS_PLUGINS_ROBOTS_TESTBOT_CONTROLINTERFACE}
   # control_interface/ci_testbot_proximity_sensor.cpp
-  # control_interface/ci_testbot_base_ground_sensor.cpp
-  # control_interface/ci_testbot_lidar_sensor.cpp
-  # control_interface/ci_testbot_light_sensor.cpp
   )
 
 set(ARGOS3_SOURCES_PLUGINS_ROBOTS_TESTBOT
   ${ARGOS3_SOURCES_PLUGINS_ROBOTS_TESTBOT}
   ${ARGOS3_HEADERS_PLUGINS_ROBOTS_TESTBOT_SIMULATOR}
   simulator/dynamics2d_testbot_model.cpp
-  # simulator/dynamics3d_testbot_model.cpp
-  # simulator/testbot_base_ground_rotzonly_sensor.cpp
-  # simulator/testbot_light_rotzonly_sensor.cpp
-  # simulator/testbot_lidar_default_sensor.cpp
   simulator/testbot_entity.cpp
   # simulator/testbot_proximity_default_sensor.cpp
 )
@@ -53,26 +39,12 @@ set(ARGOS3_HEADERS_PLUGINS_ROBOTS_TESTBOT_SIMULATOR
 set(ARGOS3_SOURCES_PLUGINS_ROBOTS_TESTBOT
   ${ARGOS3_SOURCES_PLUGINS_ROBOTS_TESTBOT}
   ${ARGOS3_HEADERS_PLUGINS_ROBOTS_TESTBOT_SIMULATOR}
-  # simulator/qtopengl_testbot.h
   simulator/qtopengl_testbot.cpp)
 
 #
 # Create  testbot plugin
 #
 add_library(argos3plugin_simulator_testbot SHARED ${ARGOS3_SOURCES_PLUGINS_ROBOTS_TESTBOT})
-
-
-
-
-# add_library(argos3plugin_simulator_testbot SHARED
-#   control_interface/ci_testbot_proximity_sensor.cpp
-#   control_interface/ci_testbot_proximity_sensor.h
-#   simulator/dynamics2d_testbot_model.cpp
-#   simulator/dynamics2d_testbot_model.h
-#   simulator/testbot_entity.cpp
-#   simulator/testbot_entity.h
-#   simulator/qtopengl_testbot.cpp
-#   simulator/qtopengl_testbot.h)
 
 target_link_libraries(argos3plugin_simulator_testbot
     argos3core_simulator
